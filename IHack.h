@@ -9,6 +9,7 @@ class CUserCmd;
 class CBaseEntity;
 
 // base hack interface
+// TODO: tidy up function and type names to be uniform with our style
 template <typename Derived>
 class IHack
 {
@@ -24,10 +25,9 @@ public:
 	{
 	}
 
-	// each hack must impl the name function
-
 	// These functions must be defined in doubles to allow the derived class
 	// to not implement them
+	// if they were not in this double format then there would be boundless recursion (which is caught as a compiler error)
 
 	// TODO: remove
 	const char *_name () const
@@ -48,7 +48,8 @@ public:
 	// called during paint traverse
 	bool _paint ()
 	{
-		return derived ().paint ();
+		derived ().paint ();
+		return false;
 	}
 	bool paint ()
 	{
@@ -101,6 +102,16 @@ public:
 		return derived ().perFrame ();
 	}
 	void perFrame ()
+	{
+		return;
+	}
+
+	// called EVERY frame (not just when we are in game)
+	void _everyFrame ()
+	{
+		return derived ().everyFrame ();
+	}
+	void everyFrame ()
 	{
 		return;
 	}
