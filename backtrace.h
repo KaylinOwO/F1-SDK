@@ -32,6 +32,7 @@ public:
 
 #ifdef _MSC_VER
 
+LONG UnhandledSehExceptionFilter (EXCEPTION_POINTERS *e, bool silent, const char *name = "");
 LONG WINAPI UnhandledSehExceptionHandler (EXCEPTION_POINTERS *e);
 
 #endif
