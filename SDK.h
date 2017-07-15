@@ -80,7 +80,7 @@ public:
 
 	bool Con_IsVisible (void);
 
-	int GetLocalPlayer (void);
+	int GetLocalPlayerIndex (void);
 
 	float Time (void);
 
@@ -177,11 +177,11 @@ public:
 	// current number of entries in the database
 	virtual int SurfacePropCount (void) const = 0;
 
-	virtual int GetSurfaceIndex (const char *pSurfacePropName) const = 0;
+	virtual int  GetSurfaceIndex (const char *pSurfacePropName) const                                                                    = 0;
 	virtual void GetPhysicsProperties (int surfaceDataIndex, float *density, float *thickness, float *friction, float *elasticity) const = 0;
 
-	virtual /*surfacedata_t*/ void *GetSurfaceData (int surfaceDataIndex) = 0;
-	virtual const char *GetString (unsigned short stringTableIndex) const = 0;
+	virtual /*surfacedata_t*/ void *GetSurfaceData (int surfaceDataIndex)             = 0;
+	virtual const char *            GetString (unsigned short stringTableIndex) const = 0;
 
 	virtual const char *GetPropName (int surfaceDataIndex) const = 0;
 
@@ -247,48 +247,35 @@ class CInterfaces
 {
 public:
 	// Client
-	CHLClient *       Client;
-	CEntList *        EntList;
-	CPrediction *     Prediction;
-	IGameMovement *   GameMovement;
-	ClientModeShared *ClientMode;
-	// nn_interface<IMoveHelper *> MoveHelper;
-
-	// EngineClient 			*Engine;
-	EngineClient *        Engine;
-	CModelInfo *          ModelInfo;
-	CModelRender *        ModelRender;
-	CRenderView *         RenderView;
-	CEngineTrace *        EngineTrace;
-	CUniformRandomStream *RandomStream;
-	IGameEventManager2 *  EventManager;
-	IVDebugOverlay *      DebugOverlay;
-	IEngineSound *        SoundEngine;
-	CDemoPlayer *         DemoPlayer;
-	CClientState *        ClientState;
-
-	CSurface *Surface;
-
-	CPanel *Panels;
-
-	ICvar *Cvar;
-
-	CInput *Input;
-
-	CGlobals *Globals;
-
-	IPhysicsSurfaceProps *PhysicsSurfaceProps;
-
-	CMaterialSystem *MatSystem;
-
-	IEngineVGui *EngineVGUI;
-
-	IScreenSpaceEffectManager *ScreenSpaceEffectManager;
-
+	CHLClient *                           Client;
+	CEntList *                            EntList;
+	CPrediction *                         Prediction;
+	IGameMovement *                       GameMovement;
+	ClientModeShared *                    ClientMode;
+	EngineClient *                        Engine;
+	CModelInfo *                          ModelInfo;
+	CModelRender *                        ModelRender;
+	CRenderView *                         RenderView;
+	CEngineTrace *                        EngineTrace;
+	CUniformRandomStream *                RandomStream;
+	IGameEventManager2 *                  EventManager;
+	IVDebugOverlay *                      DebugOverlay;
+	IEngineSound *                        SoundEngine;
+	CDemoPlayer *                         DemoPlayer;
+	CClientState *                        ClientState;
+	CSurface *                            Surface;
+	CPanel *                              Panels;
+	ICvar *                               Cvar;
+	CInput *                              Input;
+	CGlobals *                            Globals;
+	IPhysicsSurfaceProps *                PhysicsSurfaceProps;
+	CMaterialSystem *                     MatSystem;
+	IEngineVGui *                         EngineVGUI;
+	IScreenSpaceEffectManager *           ScreenSpaceEffectManager;
 	static class ILagCompensationManager *LagCompensation;
+	ISpatialPartition *                   Partition;
 
 	CSteamAPIContext SteamContext;
-
 	CInterfaces ();
 
 	// TODO: remove this when linxu
@@ -453,7 +440,7 @@ public:
 	bool Interpolate (float currentTime);
 
 	DWORD *GetModel ();
-	int DrawModel (int flags);
+	int    DrawModel (int flags);
 
 	class CStudioHdr *GetStudioHdr ();
 
@@ -562,7 +549,7 @@ public:
 	void SetSequence (int seq);
 
 	float &GetCycle ();
-	void SetCycle (int cyc);
+	void   SetCycle (int cyc);
 
 	float &GetPlaybackRate ();
 
@@ -573,7 +560,7 @@ public:
 	void SetSize (Vector &mins, Vector &maxs);
 
 	QAngle GetEyeAngles ();
-	void SetEyeAngles (QAngle ang);
+	void   SetEyeAngles (QAngle ang);
 
 	bool UseClassAnimations ();
 

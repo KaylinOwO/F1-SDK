@@ -28,14 +28,16 @@ void allocConsole ()
 	static bool alloced;
 
 	if (!alloced) {
-		if (!AllocConsole ())
-			Log::Fatal ("We Failed men...");
-		else
+		if (!AllocConsole ()) {
+			Log::Error ("Alloc console failed.");
+		} else {
 			alloced = true;
-	}
 
-	freopen ("CONOUT$", "w", stdout);
-	freopen ("CONOUT$", "w", stderr);
+			// reopen the i/o streams with the new console
+			freopen ("CONOUT$", "w", stdout);
+			freopen ("CONOUT$", "w", stderr);
+		}
+	}
 }
 
 // assumes the entity is valid
@@ -280,6 +282,62 @@ int GetNumHitboxes (CBaseEntity *ent)
 	int                 HitboxSetIndex = *(int *)((DWORD)pHeader + 0xB0);
 	mstudiohitboxset_t *pSet           = (mstudiohitboxset_t *)(((PBYTE)pHeader) + HitboxSetIndex);
 	return pSet->numhitboxes;
+}
+
+//-----------------------------------------------------------------------------
+// class CFlaggedEntitiesEnum
+//-----------------------------------------------------------------------------
+
+CFlaggedEntitiesEnum::CFlaggedEntitiesEnum (CBaseEntity **pList, int listMax, int flagMask)
+{
+	m_pList    = pList;
+	m_listMax  = listMax;
+	m_flagMask = flagMask;
+	m_count    = 0;
+}
+
+bool CFlaggedEntitiesEnum::AddToList (CBaseEntity *pEntity)
+{
+	if (m_count >= m_listMax) {
+		//AssertMsgOnce (0, "reached enumerated list limit.  Increase limit, decrease radius, or make it so entity flags will work for you");
+		Log::Console ("Enumeration limit reached.");
+		return false;
+	}
+	m_pList[m_count] = pEntity;
+	m_count++;
+	return true;
+}
+
+IterationRetval_t CFlaggedEntitiesEnum::EnumElement (IHandleEntity *pHandleEntity)
+{
+	CBaseEntity *pEntity = GetBaseEntity (pHandleEntity);
+	if (pEntity) {
+		if (m_flagMask && !(pEntity->GetFlags () & m_flagMask)) // Does it meet the criteria?
+			return ITERATION_CONTINUE;
+
+		if (!AddToList (pEntity))
+			return ITERATION_STOP;
+	}
+
+	return ITERATION_CONTINUE;
+}
+
+int UTIL_EntitiesInBox (const Vector &mins, const Vector &maxs, CFlaggedEntitiesEnum *pEnum)
+{
+	gInts->Partition->EnumerateElementsInBox (PARTITION_ENGINE_NON_STATIC_EDICTS, mins, maxs, false, pEnum);
+	return pEnum->GetCount ();
+}
+
+int UTIL_EntitiesAlongRay (const Ray_t &ray, CFlaggedEntitiesEnum *pEnum)
+{
+	gInts->Partition->EnumerateElementsAlongRay (PARTITION_ENGINE_NON_STATIC_EDICTS, ray, false, pEnum);
+	return pEnum->GetCount ();
+}
+
+int UTIL_EntitiesInSphere (const Vector &center, float radius, CFlaggedEntitiesEnum *pEnum)
+{
+	gInts->Partition->EnumerateElementsInSphere (PARTITION_ENGINE_NON_STATIC_EDICTS, center, radius, false, pEnum);
+	return pEnum->GetCount ();
 }
 
 int  CUtil::mouseState     = 1;

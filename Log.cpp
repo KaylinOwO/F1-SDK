@@ -18,8 +18,8 @@ void AddToQueue (const char *s)
 		// cleanup
 		char *removed;
 		if (Log::LogQueue.RemoveAtHead (removed)) {
-			delete removed;
-			removed = nullptr;
+			delete[] removed;
+			// removed = nullptr;
 		}
 	}
 }
@@ -179,13 +179,12 @@ void Log::Console (const char *fmt, ...)
 	vsnprintf (buf, sizeof (buf), fmt, vlist);
 	va_end (vlist);
 
-	if (gInts == nullptr) {
+	if (gInts->Cvar == nullptr) {
 		// in case we need to print errors when we dont have the interfaces
 		sprintf (outbuf, "{CONSOLE} %s\n", buf);
 		fpMsg (outbuf);
 	} else {
 		gInts->Cvar->ConsoleColorPrintf ({0, 0, 255, 255}, "%s\n", buf);
+		AddToQueue (buf);
 	}
-
-	AddToQueue (buf);
 }

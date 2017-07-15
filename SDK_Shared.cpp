@@ -10,9 +10,14 @@ CBaseEntity *GetBaseEntity (CHandle<CBaseEntity> handle)
 	return gInts->EntList->GetClientEntityFromHandle (handle);
 }
 
+CBaseEntity *GetBaseEntity (IHandleEntity *ent)
+{
+	return GetBaseEntity (ent->GetRefEHandle ());
+}
+
 CBaseEntity *GetLocalPlayer ()
 {
-	return GetBaseEntity (gInts->Engine->GetLocalPlayer ());
+	return GetBaseEntity (gInts->Engine->GetLocalPlayerIndex ());
 }
 
 // TODO: should this be in a cpp?
@@ -149,7 +154,7 @@ bool CBaseEntity::IsZoomed ()
 
 void CBaseEntity::SetZoomed (bool state)
 {
-	if (GetIndex () == me) {
+	if (GetIndex () == gInts->Engine->GetLocalPlayerIndex ()) {
 		realZoom = state;
 	} else {
 		state ? GetCond () |= tf_cond::TFCond_Zoomed : GetCond () &= ~tf_cond::TFCond_Zoomed;

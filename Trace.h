@@ -15,16 +15,11 @@ enum TraceType_t : int
 #define COORD_EXTENT (float)(2 * MAX_COORD_INTEGER)
 #define MAX_TRACE_LENGTH (float)(1.732050807569 * COORD_EXTENT)
 
-static CBaseEntity *GetBaseEntity (IHandleEntity *ent)
-{
-	return GetBaseEntity (ent->GetRefEHandle ());
-}
-
 class ITraceFilter
 {
 public:
-	virtual bool ShouldHitEntity (IHandleEntity *BaseEntity, int mask) = 0;
-	virtual TraceType_t GetTraceType () const = 0;
+	virtual bool        ShouldHitEntity (IHandleEntity *BaseEntity, int mask) = 0;
+	virtual TraceType_t GetTraceType () const                                 = 0;
 };
 
 class CBaseFilter : public ITraceFilter
@@ -35,7 +30,7 @@ public:
 	{
 	}
 
-	virtual bool ShouldHitEntity (IHandleEntity *entity, int contentsMask);
+	virtual bool        ShouldHitEntity (IHandleEntity *entity, int contentsMask);
 	virtual TraceType_t GetTraceType () const;
 
 	// Setup the filter

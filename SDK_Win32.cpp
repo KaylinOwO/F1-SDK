@@ -93,7 +93,7 @@ bool EngineClient::Con_IsVisible ()
 	return getvfunc<OriginalFn> (this, 11) (this);
 }
 
-int EngineClient::GetLocalPlayer ()
+int EngineClient::GetLocalPlayerIndex ()
 {
 	typedef int(__thiscall * OriginalFn) (PVOID);
 	return getvfunc<OriginalFn> (this, 12) (this);
@@ -284,7 +284,7 @@ void CSurface::GetTextSize (unsigned long font, const char *text, int &wide, int
 	typedef void(__thiscall * OriginalFn) (PVOID, unsigned long, const wchar_t *, int &, int &);
 	getvfunc<OriginalFn> (this, 75) (this, font, temp, wide, tall);
 
-	delete temp;
+	delete[] temp;
 }
 
 void CSurface::PlaySound (const char *sound)

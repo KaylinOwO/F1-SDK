@@ -35,6 +35,52 @@ mstudiobbox_t *GetHitbox (int iHitbox, DWORD *pHeader);
 
 int GetNumHitboxes (CBaseEntity *ent);
 
+// SDK rip for getting entites from the partition manager
+class CFlaggedEntitiesEnum : public IPartitionEnumerator
+{
+public:
+	CFlaggedEntitiesEnum (CBaseEntity **pList, int listMax, int flagMask);
+
+	// This gets called	by the enumeration methods with each element
+	// that passes the test.
+	virtual IterationRetval_t EnumElement (IHandleEntity *pHandleEntity);
+
+	int GetCount ()
+	{
+		return m_count;
+	}
+	bool AddToList (CBaseEntity *pEntity);
+
+private:
+	CBaseEntity **m_pList;
+	int           m_listMax;
+	int           m_flagMask;
+	int           m_count;
+};
+
+// Pass in an array of pointers and an array size, it fills the array and returns the number inserted
+int UTIL_EntitiesInBox (const Vector &mins, const Vector &maxs, CFlaggedEntitiesEnum *pEnum);
+int UTIL_EntitiesAlongRay (const Ray_t &ray, CFlaggedEntitiesEnum *pEnum);
+int UTIL_EntitiesInSphere (const Vector &center, float radius, CFlaggedEntitiesEnum *pEnum);
+
+inline int UTIL_EntitiesInBox (CBaseEntity **pList, int listMax, const Vector &mins, const Vector &maxs, int flagMask)
+{
+	CFlaggedEntitiesEnum boxEnum (pList, listMax, flagMask);
+	return UTIL_EntitiesInBox (mins, maxs, &boxEnum);
+}
+
+inline int UTIL_EntitiesAlongRay (CBaseEntity **pList, int listMax, const Ray_t &ray, int flagMask)
+{
+	CFlaggedEntitiesEnum rayEnum (pList, listMax, flagMask);
+	return UTIL_EntitiesAlongRay (ray, &rayEnum);
+}
+
+inline int UTIL_EntitiesInSphere (CBaseEntity **pList, int listMax, const Vector &center, float radius, int flagMask)
+{
+	CFlaggedEntitiesEnum sphereEnum (pList, listMax, flagMask);
+	return UTIL_EntitiesInSphere (center, radius, &sphereEnum);
+}
+
 #include "F1_Gui.h"
 
 // TODO: dont do this
