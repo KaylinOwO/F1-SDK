@@ -144,13 +144,11 @@ inline void quickCrash ()
 }
 
 // TODO: remove
-//#define me gInts->Engine->GetLocalPlayerIndex ()
+#define me gInts->Engine->GetLocalPlayer ()
 
 // some helper functions for less typing
-// TODO: these should really be defined in SDK.h
 CBaseEntity *GetBaseEntity (int index);
 CBaseEntity *GetBaseEntity (CHandle<CBaseEntity> handle);
-CBaseEntity *GetBaseEntity (IHandleEntity *handle);
 CBaseEntity *GetLocalPlayer ();
 
 enum HitboxMasks
