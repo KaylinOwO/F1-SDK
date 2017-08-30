@@ -105,6 +105,12 @@ float EngineClient::Time ()
 	return getvfunc<OriginalFn> (this, 14) (this);
 }
 
+float EngineClient::GetLastTimeStamp ()
+{
+	typedef float(__thiscall * OriginalFn) (PVOID);
+	return getvfunc<OriginalFn> (this, 15) (this);
+}
+
 void EngineClient::GetViewAngles (QAngle &va)
 {
 	typedef void(__thiscall * OriginalFn) (PVOID, QAngle &);
@@ -365,15 +371,15 @@ void CHLClient::RenderView (CViewSetup const &view, int nClearFlags, int whatToD
 	return getvfunc<OriginalFn> (this, 27) (this, view, nClearFlags, whatToDraw);
 }
 
-const char *CModelInfo::GetModelName (DWORD *model)
+const char *CModelInfo::GetModelName (model_t *model)
 {
-	typedef const char *(__thiscall * OriginalFn) (PVOID, DWORD *);
+	typedef const char *(__thiscall * OriginalFn) (PVOID, model_t *);
 	return getvfunc<OriginalFn> (this, 3) (this, model);
 }
 
-DWORD *CModelInfo::GetStudiomodel (DWORD *model)
+studiohdr_t *CModelInfo::GetStudioModel (model_t *model)
 {
-	typedef DWORD *(__thiscall * OriginalFn) (PVOID, DWORD *);
+	typedef studiohdr_t *(__thiscall * OriginalFn) (PVOID, model_t *);
 	return getvfunc<OriginalFn> (this, 28) (this, model);
 }
 
@@ -404,46 +410,46 @@ CInterfaces::CInterfaces ()
 // ----------------------------------------------------------------------------
 // CBaseEntity
 // ----------------------------------------------------------------------------
-CBaseHandle CBaseEntity::GetRefEHandle ()
+CBaseHandle CBaseEntity::GetRefEHandle () const
 {
-	typedef CBaseHandle (__thiscall * OriginalFn) (PVOID);
+	typedef CBaseHandle (__thiscall * OriginalFn) (const CBaseEntity *);
 	return getvfunc<OriginalFn> (this, 1) (this);
 }
 
-ICollideable *CBaseEntity::GetCollideable ()
+ICollideable *CBaseEntity::GetCollideable () const
 {
 	// typedef ICollideable *(__thiscall *OriginalFn)(PVOID);
 	// return getvfunc<OriginalFn>(this, 2)(this);
 	return GetCollision ();
 }
 
-void CBaseEntity::SetAbsOrigin (Vector &o)
+void CBaseEntity::SetAbsOrigin (Vector &o) const
 {
-	typedef void(__thiscall * OriginalFn) (PVOID, Vector &);
+	typedef void(__thiscall * OriginalFn) (const CBaseEntity *, Vector &);
 	static OriginalFn fn = (OriginalFn)gSignatures.GetClientSignature ("55 8B EC 56 57 8B F1 E8 ? ? ? ? 8B 7D 08 F3 0F 10 07");
 	return fn (this, o);
 }
 
-void CBaseEntity::SetAbsAngles (QAngle &a)
+void CBaseEntity::SetAbsAngles (QAngle &a) const
 {
-	typedef void(__thiscall * OriginalFn) (PVOID, QAngle &);
+	typedef void(__thiscall * OriginalFn) (const CBaseEntity *, QAngle &);
 	static OriginalFn fn = (OriginalFn)gSignatures.GetClientSignature ("55 8B EC 83 EC 60 56 57 8B F1");
 	return fn (this, a);
 }
 
-Vector &CBaseEntity::GetAbsOrigin ()
+Vector &CBaseEntity::GetAbsOrigin () const
 {
-	typedef Vector &(__thiscall * OriginalFn) (PVOID);
+	typedef Vector &(__thiscall * OriginalFn) (const CBaseEntity *);
 	return getvfunc<OriginalFn> (this, 9) (this);
 }
 
-QAngle &CBaseEntity::GetAbsAngles ()
+QAngle &CBaseEntity::GetAbsAngles () const
 {
-	typedef QAngle &(__thiscall * OriginalFn) (PVOID);
+	typedef QAngle &(__thiscall * OriginalFn) (const CBaseEntity *);
 	return getvfunc<OriginalFn> (this, 10) (this);
 }
 
-void CBaseEntity::GetWorldSpaceCenter (Vector &vWorldSpaceCenter)
+void CBaseEntity::GetWorldSpaceCenter (Vector &vWorldSpaceCenter) const
 {
 	Vector vMin, vMax;
 	this->GetRenderBounds (vMin, vMax);
@@ -451,33 +457,33 @@ void CBaseEntity::GetWorldSpaceCenter (Vector &vWorldSpaceCenter)
 	vWorldSpaceCenter.z += (vMin.z + vMax.z) / 2;
 }
 
-bool CBaseEntity::IsBaseCombatWeapon ()
+bool CBaseEntity::IsBaseCombatWeapon () const
 {
-	typedef bool(__thiscall * OriginalFn) (PVOID);
+	typedef bool(__thiscall * OriginalFn) (const CBaseEntity *);
 	return getvfunc<OriginalFn> (this, 137) (this);
 }
 
-bool CBaseEntity::Interpolate (float currentTime)
+bool CBaseEntity::Interpolate (float currentTime) const
 {
-	typedef bool(__thiscall * OriginalFn) (PVOID, float);
+	typedef bool(__thiscall * OriginalFn) (const CBaseEntity *, float);
 	return getvfunc<OriginalFn> (this, 97) (this, currentTime);
 }
 
-DWORD *CBaseEntity::GetModel ()
+model_t *CBaseEntity::GetModel () const
 {
-	PVOID pRenderable = static_cast<PVOID> (this + 0x4);
-	typedef DWORD *(__thiscall * OriginalFn) (PVOID);
+	const PVOID pRenderable = (const PVOID) (this + 0x4);
+	typedef model_t *(__thiscall * OriginalFn) (PVOID);
 	return getvfunc<OriginalFn> (pRenderable, 9) (pRenderable);
 }
 
-int CBaseEntity::DrawModel (int flags)
+int CBaseEntity::DrawModel (int flags) const
 {
-	PVOID pRenderable = static_cast<PVOID> (this + 0x4);
+	const PVOID pRenderable = (const PVOID) (this + 0x4);
 	typedef int(__thiscall * OriginalFn) (PVOID, int);
 	return getvfunc<OriginalFn> (pRenderable, 10) (pRenderable, flags);
 }
 
-CStudioHdr *CBaseEntity::GetStudioHdr ()
+const CStudioHdr *CBaseEntity::GetStudioHdr () const
 {
 	// from GetModelPtr in ida
 	// v16 = this - 4;
@@ -496,58 +502,58 @@ CStudioHdr *CBaseEntity::GetStudioHdr ()
 	return m_pStudioHdr;
 }
 
-bool CBaseEntity::SetupBones (matrix3x4 *pBoneToWorldOut, int nMaxBones, int boneMask, float currentTime)
+bool CBaseEntity::SetupBones (matrix3x4 *pBoneToWorldOut, int nMaxBones, int boneMask, float currentTime) const
 {
-	PVOID pRenderable = static_cast<PVOID> (this + 0x4);
+	const PVOID pRenderable = (const PVOID) (this + 0x4);
 	typedef bool(__thiscall * OriginalFn) (PVOID, matrix3x4 *, int, int, float);
 	return getvfunc<OriginalFn> (pRenderable, 16) (pRenderable, pBoneToWorldOut, nMaxBones, boneMask, currentTime);
 }
 
-ClientClass *CBaseEntity::GetClientClass ()
+const ClientClass *CBaseEntity::GetClientClass () const
 {
-	PVOID pNetworkable = static_cast<PVOID> (this + 0x8);
+	const PVOID pNetworkable = (const PVOID) (this + 0x8);
 	typedef ClientClass *(__thiscall * OriginalFn) (PVOID);
 	return getvfunc<OriginalFn> (pNetworkable, 2) (pNetworkable);
 }
 
-bool CBaseEntity::IsDormant ()
+bool CBaseEntity::IsDormant () const
 {
-	PVOID pNetworkable = static_cast<PVOID> (this + 0x8);
+	const PVOID pNetworkable = (const PVOID) (this + 0x8);
 	typedef bool(__thiscall * OriginalFn) (PVOID);
 	return getvfunc<OriginalFn> (pNetworkable, 8) (pNetworkable);
 }
 
-int CBaseEntity::GetIndex ()
+const int CBaseEntity::GetIndex () const
 {
-	PVOID pNetworkable = static_cast<PVOID> (this + 0x8);
+	const PVOID pNetworkable = (const PVOID) (this + 0x8);
 	typedef int(__thiscall * OriginalFn) (PVOID);
 	return getvfunc<OriginalFn> (pNetworkable, 9) (pNetworkable);
 }
 
-void CBaseEntity::GetRenderBounds (Vector &mins, Vector &maxs)
+void CBaseEntity::GetRenderBounds (Vector &mins, Vector &maxs) const
 {
-	PVOID pRenderable = static_cast<PVOID> (this + 0x4);
+	const PVOID pRenderable = (const PVOID) (this + 0x4);
 	typedef void(__thiscall * OriginalFn) (PVOID, Vector &, Vector &);
 	getvfunc<OriginalFn> (pRenderable, 20) (pRenderable, mins, maxs);
 }
 
-QAngle &CBaseEntity::GetPrevLocalAngles ()
+QAngle &CBaseEntity::GetPrevLocalAngles () const
 {
-	typedef QAngle &(__thiscall * OriginalFn) (PVOID);
+	typedef QAngle &(__thiscall * OriginalFn) (const CBaseEntity *);
 	// could be 66
 	return getvfunc<OriginalFn> (this, 142) (this);
 }
 
 matrix3x4 &CBaseEntity::GetRgflCoordinateFrame ()
 {
-	// DYNVAR_OFF( n, DWORD, -0x4C, "DT_BaseEntity", "m_CollisionGroup" );
+	// NETVAR_OFF( n, DWORD, -0x4C, "DT_BaseEntity", "m_CollisionGroup" );
 	// return *reinterpret_cast< matrix3x4 * >( n.getValue(this) );
 	PVOID pRenderable = static_cast<PVOID> (this + 0x4);
 	typedef matrix3x4 &(__thiscall * OriginalFn) (PVOID);
 	return getvfunc<OriginalFn> (pRenderable, 34) (pRenderable);
 }
 
-C_AnimationLayer *CBaseEntity::GetAnimOverlay (int index)
+C_AnimationLayer *CBaseEntity::GetAnimOverlay (int index) const
 {
 	// C_AnimationLayer *m_AnimOverlay = *(C_AnimationLayer **)(this + 2216); // check for "%8.4f : %30s : %5.3f : %4.2f : %1d\n"
 
@@ -556,27 +562,27 @@ C_AnimationLayer *CBaseEntity::GetAnimOverlay (int index)
 	return &m_AnimOverlay[index];
 }
 
-int CBaseEntity::GetNumAnimOverlays ()
+int CBaseEntity::GetNumAnimOverlays () const
 {
 	CUtlVector<C_AnimationLayer> &m_AnimOverlay = *(CUtlVector<C_AnimationLayer> *)(this + 2216);
 	return m_AnimOverlay.Count ();
 	// return *(int *)(this + 2288); // dont ask - check for "%8.4f : %30s : %5.3f : %4.2f : %1d"
 }
 
-void CBaseEntity::SetSize (Vector &mins, Vector &maxs)
+void CBaseEntity::SetSize (Vector &mins, Vector &maxs) const
 {
 	static DWORD dwFunc = gSignatures.GetClientSignature ("55 8B EC 83 EC 28 53 8B 5D 08 56 8B 75 0C 57 8B 03");
-	typedef void(__thiscall * OriginalFn) (PVOID, Vector &, Vector &);
+	typedef void(__thiscall * OriginalFn) (const CBaseEntity *, Vector &, Vector &);
 	return ((OriginalFn) (dwFunc)) ((this + 456), mins, maxs); // dont question it - check for "maxs" or "mins"
 }
 
-float CBaseEntity::GetAttributeFloat (float value, const char *attrib)
+float CBaseEntity::GetAttributeFloat (float value, const char *attrib) const
 {
 	static DWORD dwFuncLoc = RESOLVE_CALLGATE (gSignatures.GetClientSignature ("E8 ? ? ? ? 8B 47 08 8D 4F 08 83 C4 14 D9 5D F0") + 1);
 
 	// this appears to take more arguments then the TF2C sourcecode suggests
 
-	typedef float(__cdecl * OriginalFn) (float, const char *, CBaseEntity *, int, int);
+	typedef float(__cdecl * OriginalFn) (float, const char *, const CBaseEntity *, int, int);
 
 	return ((OriginalFn)dwFuncLoc) (value, attrib, this, 0, 1);
 }
@@ -584,11 +590,6 @@ float CBaseEntity::GetAttributeFloat (float value, const char *attrib)
 // ----------------------------------------------------------------------------
 // CBaseCombatWeapon
 // ----------------------------------------------------------------------------
-
-int CBaseCombatWeapon::Clip1 ()
-{
-	DYNVAR_RETURN (int, this, "DT_BaseCombatWeapon", "LocalWeaponData", "m_iClip1");
-}
 
 int CBaseCombatWeapon::GetMaxClip1 ()
 {

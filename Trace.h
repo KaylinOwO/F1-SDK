@@ -6,8 +6,8 @@
 enum TraceType_t : int
 {
 	TRACE_EVERYTHING = 0,
-	TRACE_WORLD_ONLY,              // NOTE: This does *not* test static props!!!
-	TRACE_ENTITIES_ONLY,           // NOTE: This version will *not* test static props
+	TRACE_WORLD_ONLY, // NOTE: This does *not* test static props!!!
+	TRACE_ENTITIES_ONLY, // NOTE: This version will *not* test static props
 	TRACE_EVERYTHING_FILTER_PROPS, // NOTE: This version will pass the IHandleEntity for props through the filter, unlike all other filters
 };
 
@@ -34,11 +34,11 @@ public:
 	virtual TraceType_t GetTraceType () const;
 
 	// Setup the filter
-	inline void SetIgnoreSelf (CBaseEntity *e)
+	inline void SetIgnoreSelf (const CBaseEntity *const e)
 	{
 		this->self = e;
 	}
-	inline void SetIgnoreEntity (CBaseEntity *e)
+	inline void SetIgnoreEntity (const CBaseEntity *const e)
 	{
 		this->ignore = e;
 	}
@@ -47,14 +47,14 @@ protected:
 	// void Debug( CBaseEntity* pEnt );
 
 protected:
-	CBaseEntity *self;
-	CBaseEntity *ignore;
+	const CBaseEntity *self;
+	const CBaseEntity *ignore;
 };
 
 inline bool CBaseFilter::ShouldHitEntity (IHandleEntity *handle, int contentsMask)
 {
-	CBaseEntity *ent   = GetBaseEntity (handle);
-	ClientClass *entCC = ent->GetClientClass ();
+	const CBaseEntity *ent   = GetBaseEntity (handle);
+	const ClientClass *entCC = ent->GetClientClass ();
 
 	switch (entCC->classId) {
 	case classId::CFuncRespawnRoomVisualizer:

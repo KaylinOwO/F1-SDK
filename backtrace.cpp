@@ -95,4 +95,11 @@ LONG WINAPI UnhandledSehExceptionHandler (EXCEPTION_POINTERS *e)
 {
 	return UnhandledSehExceptionFilter (e, false);
 }
+
+LONG CALLBACK UnhandledVectoredExceptionHandler (EXCEPTION_POINTERS *e)
+{
+	ConMsg ("[VEH] 0x%X @ 0x%X\n", e->ExceptionRecord->ExceptionCode, e->ExceptionRecord->ExceptionAddress);
+	return EXCEPTION_CONTINUE_SEARCH;
+}
+
 #endif

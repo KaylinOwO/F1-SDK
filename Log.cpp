@@ -5,23 +5,26 @@ char g_logFile[MAX_PATH];
 char g_debugLogFile[MAX_PATH];
 
 CUtlQueue<char *> Log::LogQueue;
+CThreadFastMutex  Log::LogMutex;
 int               Log::MaxQueueItems;
 
 void AddToQueue (const char *s)
 {
 	// alloc a new heap backed string
-	char *heapstr = new char[strlen (s) + 1];
-	V_strcpy (heapstr, s);
-	Log::LogQueue.Insert (heapstr);
+	//char *heapstr = new char[strlen (s) + 1];
+	//V_strcpy (heapstr, s);
+	//Log::LogMutex.TryLock ();
+	//Log::LogQueue.Insert (heapstr);
 
-	while (Log::LogQueue.Count () > Log::MaxQueueItems) {
-		// cleanup
-		char *removed;
-		if (Log::LogQueue.RemoveAtHead (removed)) {
-			delete[] removed;
-			// removed = nullptr;
-		}
-	}
+	//while (Log::LogQueue.Count () > Log::MaxQueueItems) {
+	//	// cleanup
+	//	char *removed;
+	//	if (Log::LogQueue.RemoveAtHead (removed)) {
+	//		delete[] removed;
+	//		// removed = nullptr;
+	//	}
+	//}
+	//Log::LogMutex.Unlock ();
 }
 
 void Log::Init (HMODULE hModule)
@@ -184,7 +187,7 @@ void Log::Console (const char *fmt, ...)
 		sprintf (outbuf, "{CONSOLE} %s\n", buf);
 		fpMsg (outbuf);
 	} else {
-		gInts->Cvar->ConsoleColorPrintf ({0, 0, 255, 255}, "%s\n", buf);
+		ConColorMsg ({0, 0, 255, 255}, "%s\n", buf);
 		AddToQueue (buf);
 	}
 }

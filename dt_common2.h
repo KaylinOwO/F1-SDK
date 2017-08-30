@@ -125,13 +125,13 @@ public:
 
 		switch (m_Type) {
 		case DPT_Int:
-			snprintf (text, sizeof (text), "%i", m_Int);
+			V_snprintf (text, sizeof (text), "%i", m_Int);
 			break;
 		case DPT_Float:
-			snprintf (text, sizeof (text), "%.3f", m_Float);
+			V_snprintf (text, sizeof (text), "%.3f", m_Float);
 			break;
 		case DPT_Vector:
-			snprintf (text, sizeof (text), "(%.3f,%.3f,%.3f)", m_Vector[0], m_Vector[1], m_Vector[2]);
+			V_snprintf (text, sizeof (text), "(%.3f,%.3f,%.3f)", m_Vector[0], m_Vector[1], m_Vector[2]);
 			break;
 #if 0 // We can't ship this since it changes the size of DTVariant to be 20 bytes instead of 16 and that breaks MODs!!!
 						case DPT_Quaternion :
@@ -146,13 +146,13 @@ public:
 				return "NULL";
 			break;
 		case DPT_Array:
-			snprintf (text, sizeof (text), "Array");
+			V_snprintf (text, sizeof (text), "Array");
 			break;
 		case DPT_DataTable:
-			snprintf (text, sizeof (text), "DataTable");
+			V_snprintf (text, sizeof (text), "DataTable");
 			break;
 		default:
-			snprintf (text, sizeof (text), "DVariant type %i unknown", m_Type);
+			V_snprintf (text, sizeof (text), "DVariant type %i unknown", m_Type);
 			break;
 		}
 

@@ -1,21 +1,21 @@
 #include "SDK.h"
 
-CBaseEntity *GetBaseEntity (int index)
+CBaseEntity *const GetBaseEntity (int index)
 {
 	return gInts->EntList->GetClientEntity (index);
 }
 
-CBaseEntity *GetBaseEntity (CHandle<CBaseEntity> handle)
+CBaseEntity *const GetBaseEntity (CHandle<CBaseEntity> handle)
 {
 	return gInts->EntList->GetClientEntityFromHandle (handle);
 }
 
-CBaseEntity *GetBaseEntity (IHandleEntity *ent)
+CBaseEntity *const GetBaseEntity (IHandleEntity *ent)
 {
 	return GetBaseEntity (ent->GetRefEHandle ());
 }
 
-CBaseEntity *GetLocalPlayer ()
+CBaseEntity *const GetLocalPlayer ()
 {
 	return GetBaseEntity (gInts->Engine->GetLocalPlayerIndex ());
 }
@@ -36,118 +36,118 @@ CScreenSpaceEffectRegistration::CScreenSpaceEffectRegistration (const char *pNam
 
 // anything that is platform agnostic goes in this file
 
-int CBaseEntity::GetHealth ()
+int CBaseEntity::GetHealth () const
 {
 	// should be one time across all instances
 	// static CDynamicNetvar<int> n( "DT_BasePlayer", "m_iHealth" );
 	// return n.GetValue( this );
-	DYNVAR_RETURN (int, this, "DT_BasePlayer", "m_iHealth");
+	NETVAR_RETURN (int, this, "DT_BasePlayer", "m_iHealth");
 }
 
-BYTE CBaseEntity::GetLifeState ()
+BYTE CBaseEntity::GetLifeState () const
 {
 	// static CDynamicNetvar<BYTE> n( "DT_BasePlayer", "m_lifeState" );
 	// return n.GetValue( this );
-	DYNVAR_RETURN (BYTE, this, "DT_BasePlayer", "m_lifeState");
+	NETVAR_RETURN (BYTE, this, "DT_BasePlayer", "m_lifeState");
 }
 
-bool CBaseEntity::IsAlive ()
+bool CBaseEntity::IsAlive () const
 {
 	return GetLifeState () == LIFE_ALIVE;
 }
 
-int CBaseEntity::GetTeam ()
+int CBaseEntity::GetTeam () const
 {
-	DYNVAR_RETURN (int, this, "DT_BaseEntity", "m_iTeamNum");
+	NETVAR_RETURN (int, this, "DT_BaseEntity", "m_iTeamNum");
 }
 
-tf_classes CBaseEntity::GetClass ()
+tf_classes CBaseEntity::GetClass () const
 {
-	DYNVAR_RETURN (tf_classes, this, "DT_TFPlayer", "m_PlayerClass", "m_iClass");
+	NETVAR_RETURN (tf_classes, this, "DT_TFPlayer", "m_PlayerClass", "m_iClass");
 }
 
-int &CBaseEntity::GetFlags ()
+int &CBaseEntity::GetFlags () const
 {
-	DYNVAR_RETURN (int &, this, "DT_BasePlayer", "m_fFlags");
+	NETVAR_RETURN (int &, this, "DT_BasePlayer", "m_fFlags");
 }
 
-CBaseCombatWeapon *CBaseEntity::GetActiveWeapon ()
+CBaseCombatWeapon *CBaseEntity::GetActiveWeapon () const
 {
-	DYNVAR (n, CHandle<CBaseEntity>, "DT_BaseCombatCharacter", "m_hActiveWeapon");
+	NETVAR (n, CHandle<CBaseEntity>, "DT_BaseCombatCharacter", "m_hActiveWeapon");
 	return (CBaseCombatWeapon *)gInts->EntList->GetClientEntityFromHandle (n.GetValue (this));
 }
 
-bool CBaseEntity::IsReadyToBackstab ()
+bool CBaseEntity::IsReadyToBackstab () const
 {
 	// TODO maybe move to CBaseCombatWeapon?
-	DYNVAR_RETURN (bool, this, "DT_TFWeaponKnife", "m_bReadyToBackstab");
+	NETVAR_RETURN (bool, this, "DT_TFWeaponKnife", "m_bReadyToBackstab");
 }
 
-Vector &CBaseEntity::GetViewOffset ()
+Vector &CBaseEntity::GetViewOffset () const
 {
-	DYNVAR_RETURN (Vector &, this, "DT_BasePlayer", "localdata", "m_vecViewOffset[0]");
+	NETVAR_RETURN (Vector &, this, "DT_BasePlayer", "localdata", "m_vecViewOffset[0]");
 }
 
-Vector CBaseEntity::GetViewPos ()
+Vector CBaseEntity::GetViewPos () const
 {
 	return GetAbsOrigin () + GetViewOffset ();
 }
 
-float CBaseEntity::GetChargeDamage ()
+float CBaseEntity::GetChargeDamage () const
 {
-	DYNVAR_RETURN (float, this, "DT_TFSniperRifle", "SniperRifleLocalData", "m_flChargedDamage");
+	NETVAR_RETURN (float, this, "DT_TFSniperRifle", "SniperRifleLocalData", "m_flChargedDamage");
 }
 
-int &CBaseEntity::GetTickBase ()
+int &CBaseEntity::GetTickBase () const
 {
-	DYNVAR_RETURN (int &, this, "DT_BasePlayer", "localdata", "m_nTickBase");
+	NETVAR_RETURN (int &, this, "DT_BasePlayer", "localdata", "m_nTickBase");
 }
 
 // TODO: move me to CBaseCombatWeapon
-float CBaseEntity::GetNextAttack ()
+float CBaseEntity::GetNextAttack () const
 {
-	DYNVAR_RETURN (float, this, "DT_BaseCombatWeapon", "LocalActiveWeaponData", "m_flNextPrimaryAttack");
+	NETVAR_RETURN (float, this, "DT_BaseCombatWeapon", "LocalActiveWeaponData", "m_flNextPrimaryAttack");
 }
 
-float CBaseEntity::GetLastFireTime ()
+float CBaseEntity::GetLastFireTime () const
 {
-	DYNVAR_RETURN (float, this, "DT_TFWeaponBase", "LocalActiveTFWeaponData", "m_flLastFireTime");
+	NETVAR_RETURN (float, this, "DT_TFWeaponBase", "LocalActiveTFWeaponData", "m_flLastFireTime");
 }
 
-Vector &CBaseEntity::GetVelocity ()
+Vector &CBaseEntity::GetVelocity () const
 {
-	DYNVAR_RETURN (Vector &, this, "DT_BasePlayer", "localdata", "m_vecBaseVelocity");
+	NETVAR_RETURN (Vector &, this, "DT_BasePlayer", "localdata", "m_vecBaseVelocity");
 }
 
-int &CBaseEntity::GetCond ()
+int &CBaseEntity::GetCond () const
 {
-	DYNVAR_RETURN (int &, this, "DT_TFPlayer", "m_Shared", "m_nPlayerCond");
+	NETVAR_RETURN (int &, this, "DT_TFPlayer", "m_Shared", "m_nPlayerCond");
 }
 
-int &CBaseEntity::GetCondEx ()
+int &CBaseEntity::GetCondEx () const
 {
-	DYNVAR_RETURN (int &, this, "DT_TFPlayer", "m_Shared", "m_nPlayerCondEx");
+	NETVAR_RETURN (int &, this, "DT_TFPlayer", "m_Shared", "m_nPlayerCondEx");
 }
 
-int &CBaseEntity::GetCondEx2 ()
+int &CBaseEntity::GetCondEx2 () const
 {
-	DYNVAR_RETURN (int &, this, "DT_TFPlayer", "m_Shared", "m_nPlayerCondEx2");
+	NETVAR_RETURN (int &, this, "DT_TFPlayer", "m_Shared", "m_nPlayerCondEx2");
 }
 
-int &CBaseEntity::GetCondEx3 ()
+int &CBaseEntity::GetCondEx3 () const
 {
-	DYNVAR_RETURN (int &, this, "DT_TFPlayer", "m_Shared", "m_nPlayerCondEx3");
+	NETVAR_RETURN (int &, this, "DT_TFPlayer", "m_Shared", "m_nPlayerCondEx3");
 }
 
-void CBaseEntity::SetCond (int c)
+void CBaseEntity::SetCond (int c) const
 {
-	DYNVAR (n, int, "DT_TFPlayer", "m_Shared", "m_nPlayerCond");
+	NETVAR (n, int, "DT_TFPlayer", "m_Shared", "m_nPlayerCond");
 	return n.SetValue (this, c);
 }
 
 // backup local player cond
 bool realZoom = false;
-bool CBaseEntity::IsZoomed ()
+bool CBaseEntity::IsZoomed () const
 {
 	return GetCond () & tf_cond::TFCond_Zoomed;
 }
@@ -161,60 +161,60 @@ void CBaseEntity::SetZoomed (bool state)
 	}
 }
 
-QAngle &CBaseEntity::GetPunchAngles ()
+QAngle &CBaseEntity::GetPunchAngles () const
 {
-	DYNVAR_RETURN (QAngle &, this, "DT_BasePlayer", "localdata", "m_Local", "m_vecPunchAngle");
+	NETVAR_RETURN (QAngle &, this, "DT_BasePlayer", "localdata", "m_Local", "m_vecPunchAngle");
 }
 
-CBaseEntity *CBaseEntity::GetOwner ()
+CBaseEntity *CBaseEntity::GetOwner () const
 {
-	DYNVAR (n, CBaseHandle, "DT_BaseCombatWeapon", "m_hOwner");
+	NETVAR (n, CBaseHandle, "DT_BaseCombatWeapon", "m_hOwner");
 	return gInts->EntList->GetClientEntityFromHandle (n.GetValue (this));
 }
 
-moveTypes CBaseEntity::GetMoveType ()
+moveTypes CBaseEntity::GetMoveType () const
 {
-	DYNVAR_RETURN (moveTypes, this, "DT_BaseEntity", "movetype");
+	NETVAR_RETURN (moveTypes, this, "DT_BaseEntity", "movetype");
 }
 
-ICollideable *CBaseEntity::GetCollision ()
+ICollideable *CBaseEntity::GetCollision () const
 {
-	DYNVAR_RETURN (ICollideable *, this, "DT_BaseEntity", "m_Collision");
+	NETVAR_RETURN (ICollideable *, this, "DT_BaseEntity", "m_Collision");
 }
 
-int CBaseEntity::GetRoundState ()
+int CBaseEntity::GetRoundState () const
 {
-	DYNVAR_RETURN (int, this, "DT_TeamplayRoundBasedRulesProxy", "teamplayroundbased_gamerules_data", "m_iRoundState");
+	NETVAR_RETURN (int, this, "DT_TeamplayRoundBasedRulesProxy", "teamplayroundbased_gamerules_data", "m_iRoundState");
 }
 
-int CBaseEntity::GetFov ()
+int CBaseEntity::GetFov () const
 {
-	DYNVAR_RETURN (int, this, "DT_BasePlayer", "m_iFOV");
+	NETVAR_RETURN (int, this, "DT_BasePlayer", "m_iFOV");
 }
 
-void CBaseEntity::SetFov (int fov)
+void CBaseEntity::SetFov (int fov) const
 {
-	DYNVAR (n, int, "DT_BasePlayer", "m_iFOV");
+	NETVAR (n, int, "DT_BasePlayer", "m_iFOV");
 	return n.SetValue (this, fov);
 }
 
-QAngle &CBaseEntity::GetRotation ()
+QAngle &CBaseEntity::GetRotation () const
 {
-	DYNVAR_RETURN (QAngle &, this, "DT_BaseEntity", "m_angRotation");
+	NETVAR_RETURN (QAngle &, this, "DT_BaseEntity", "m_angRotation");
 }
 
-Vector &CBaseEntity::GetRenderOrigin ()
+Vector &CBaseEntity::GetRenderOrigin () const
 {
-	DYNVAR_RETURN (Vector &, this, "DT_BaseEntity", "m_vecOrigin");
+	NETVAR_RETURN (Vector &, this, "DT_BaseEntity", "m_vecOrigin");
 }
 
-float CBaseEntity::GetChargeTime ()
+float CBaseEntity::GetChargeTime () const
 {
-	DYNVAR_RETURN (float, this, "DT_WeaponPipebombLauncher", "PipebombLauncherLocalData", "m_flChargeBeginTime");
+	NETVAR_RETURN (float, this, "DT_WeaponPipebombLauncher", "PipebombLauncherLocalData", "m_flChargeBeginTime");
 }
 
 float lastZoomTime = 0.0f;
-float CBaseEntity::GetZoomTime ()
+float CBaseEntity::GetZoomTime () const
 {
 	if (this->IsZoomed ()) {
 		if (lastZoomTime == 0.0f)
@@ -225,147 +225,147 @@ float CBaseEntity::GetZoomTime ()
 		return lastZoomTime = 0.0f;
 }
 
-float &CBaseEntity::GetAnimTime ()
+float &CBaseEntity::GetAnimTime () const
 {
-	DYNVAR_RETURN (float &, this, "DT_BaseEntity", "AnimTimeMustBeFirst", "m_flAnimTime");
+	NETVAR_RETURN (float &, this, "DT_BaseEntity", "AnimTimeMustBeFirst", "m_flAnimTime");
 }
 
-float &CBaseEntity::GetOldAnimTime ()
+float &CBaseEntity::GetOldAnimTime () const
 {
 	// TODO: insert return statement here
-	DYNVAR_OFF_RETURN (float &, this, 0x4, "DT_BaseEntity", "AnimTimeMustBeFirst", "m_flAnimTime");
+	NETVAR_OFF_RETURN (float &, this, 0x4, "DT_BaseEntity", "AnimTimeMustBeFirst", "m_flAnimTime");
 }
 
-float &CBaseEntity::GetSimulationTime ()
+float &CBaseEntity::GetSimulationTime () const
 {
-	DYNVAR_RETURN (float &, this, "DT_BaseEntity", "m_flSimulationTime");
+	NETVAR_RETURN (float &, this, "DT_BaseEntity", "m_flSimulationTime");
 }
 
-float &CBaseEntity::GetOldSimulationTime ()
+float &CBaseEntity::GetOldSimulationTime () const
 {
-	DYNVAR_OFF_RETURN (float &, this, 0x4, "DT_BaseEntity", "m_flSimulationTime");
+	NETVAR_OFF_RETURN (float &, this, 0x4, "DT_BaseEntity", "m_flSimulationTime");
 }
 
-void CBaseEntity::SetSimulationTime (float t)
+void CBaseEntity::SetSimulationTime (float t) const
 {
 	GetSimulationTime () = t;
 }
 
-int CBaseEntity::GetItemDefinitionIndex ()
+int CBaseEntity::GetItemDefinitionIndex () const
 {
-	DYNVAR_RETURN (int, this, "DT_EconEntity", "m_AttributeManager", "m_Item", "m_iItemDefinitionIndex");
+	NETVAR_RETURN (int, this, "DT_EconEntity", "m_AttributeManager", "m_Item", "m_iItemDefinitionIndex");
 }
 
-Vector &CBaseEntity::GetCollideableMinsPrescaled ()
+Vector &CBaseEntity::GetCollideableMinsPrescaled () const
 {
-	DYNVAR_RETURN (Vector &, this, "DT_BaseEntity", "m_Collision", "m_vecMinsPreScaled");
+	NETVAR_RETURN (Vector &, this, "DT_BaseEntity", "m_Collision", "m_vecMinsPreScaled");
 }
 
-Vector &CBaseEntity::GetCollideableMaxsPrescaled ()
+Vector &CBaseEntity::GetCollideableMaxsPrescaled () const
 {
-	DYNVAR_RETURN (Vector &, this, "DT_BaseEntity", "m_Collision", "m_vecMaxsPreScaled");
+	NETVAR_RETURN (Vector &, this, "DT_BaseEntity", "m_Collision", "m_vecMaxsPreScaled");
 }
 
-Vector &CBaseEntity::GetCollideableMins ()
+Vector &CBaseEntity::GetCollideableMins () const
 {
-	DYNVAR_RETURN (Vector &, this, "DT_BaseEntity", "m_Collision", "m_vecMins");
+	NETVAR_RETURN (Vector &, this, "DT_BaseEntity", "m_Collision", "m_vecMins");
 }
 
-Vector &CBaseEntity::GetCollideableMaxs ()
+Vector &CBaseEntity::GetCollideableMaxs () const
 {
-	DYNVAR_RETURN (Vector &, this, "DT_BaseEntity", "m_Collision", "m_vecMaxs");
+	NETVAR_RETURN (Vector &, this, "DT_BaseEntity", "m_Collision", "m_vecMaxs");
 }
 
-CBaseEntity *CBaseEntity::GetGroundEntity ()
+CBaseEntity *CBaseEntity::GetGroundEntity () const
 {
-	DYNVAR (n, CHandle<CBaseEntity>, "DT_BasePlayer", "localdata", "m_hGroundEntity");
+	NETVAR (n, CHandle<CBaseEntity>, "DT_BasePlayer", "localdata", "m_hGroundEntity");
 	return gInts->EntList->GetClientEntityFromHandle (n.GetValue (this));
 }
 
-bool CBaseEntity::IsTouchingGround ()
+bool CBaseEntity::IsTouchingGround () const
 {
 	return GetGroundEntity ();
 }
 
-float CBaseEntity::GetMaxSpeed ()
+float CBaseEntity::GetMaxSpeed () const
 {
-	DYNVAR_RETURN (float, this, "DT_BasePlayer", "m_flMaxspeed");
+	NETVAR_RETURN (float, this, "DT_BasePlayer", "m_flMaxspeed");
 }
 
-int &CBaseEntity::GetSequence ()
+int &CBaseEntity::GetSequence () const
 {
-	DYNVAR_RETURN (int &, this, "DT_BaseAnimating", "m_nSequence");
+	NETVAR_RETURN (int &, this, "DT_BaseAnimating", "m_nSequence");
 }
 
-float &CBaseEntity::GetCycle ()
+float &CBaseEntity::GetCycle () const
 {
-	DYNVAR_RETURN (float &, this, "DT_BaseAnimating", "serveranimdata", "m_flCycle");
+	NETVAR_RETURN (float &, this, "DT_BaseAnimating", "serveranimdata", "m_flCycle");
 }
 
-void CBaseEntity::SetSequence (int seq)
+void CBaseEntity::SetSequence (int seq) const
 {
 	GetSequence () = seq;
 }
 
-void CBaseEntity::SetCycle (int cyc)
+void CBaseEntity::SetCycle (int cyc) const
 {
 	// TODO: invalidatephysicsrecursive "55 8B EC 51 53 8B 5D 08 56 8B F3 83 E6 04"
 	GetCycle () = cyc;
 }
 
-float &CBaseEntity::GetPlaybackRate ()
+float &CBaseEntity::GetPlaybackRate () const
 {
-	DYNVAR_RETURN (float &, this, "DT_BaseAnimating", "m_flPlaybackRate");
+	NETVAR_RETURN (float &, this, "DT_BaseAnimating", "m_flPlaybackRate");
 }
 
-QAngle CBaseEntity::GetEyeAngles ()
+QAngle CBaseEntity::GetEyeAngles () const
 {
 	// There is no way to ensure that we will not mess up the .z part
 	// and since that overlaps another data member, bad things will happen !
-	DYNVAR (ang0, float, "DT_TFPlayer", "tfnonlocaldata", "m_angEyeAngles[0]");
-	DYNVAR (ang1, float, "DT_TFPlayer", "tfnonlocaldata", "m_angEyeAngles[1]");
+	NETVAR (ang0, float, "DT_TFPlayer", "tfnonlocaldata", "m_angEyeAngles[0]");
+	NETVAR (ang1, float, "DT_TFPlayer", "tfnonlocaldata", "m_angEyeAngles[1]");
 	return {ang0.GetValue (this), ang1.GetValue (this), 0.0f}; // z angle will always be 0
 }
 
-void CBaseEntity::SetEyeAngles (QAngle ang)
+void CBaseEntity::SetEyeAngles (QAngle ang) const
 {
-	DYNVAR (ang0, float, "DT_TFPlayer", "tfnonlocaldata", "m_angEyeAngles[0]");
-	DYNVAR (ang1, float, "DT_TFPlayer", "tfnonlocaldata", "m_angEyeAngles[1]");
+	NETVAR (ang0, float, "DT_TFPlayer", "tfnonlocaldata", "m_angEyeAngles[0]");
+	NETVAR (ang1, float, "DT_TFPlayer", "tfnonlocaldata", "m_angEyeAngles[1]");
 	ang0.SetValue (this, ang.x);
 	ang0.SetValue (this, ang.y);
 }
 
-bool CBaseEntity::UseClassAnimations ()
+bool CBaseEntity::UseClassAnimations () const
 {
-	DYNVAR_RETURN (bool, this, "DT_TFPlayer", "m_PlayerClass", "m_bUseClassAnimations");
+	NETVAR_RETURN (bool, this, "DT_TFPlayer", "m_PlayerClass", "m_bUseClassAnimations");
 }
 
-Vector &CBaseEntity::GetCustomModelOffset ()
+Vector &CBaseEntity::GetCustomModelOffset () const
 {
-	DYNVAR_RETURN (Vector &, this, "DT_TFPlayer", "m_PlayerClass", "m_vecCustomModelOffset");
+	NETVAR_RETURN (Vector &, this, "DT_TFPlayer", "m_PlayerClass", "m_vecCustomModelOffset");
 }
 
-bool CBaseEntity::GetCustomModelRotates ()
+bool CBaseEntity::GetCustomModelRotates () const
 {
-	DYNVAR_RETURN (bool, this, "DT_TFPlayer", "m_PlayerClass", "m_bCustomModelRotates");
+	NETVAR_RETURN (bool, this, "DT_TFPlayer", "m_PlayerClass", "m_bCustomModelRotates");
 }
 
-bool CBaseEntity::GetCustomModelRotationSet ()
+bool CBaseEntity::GetCustomModelRotationSet () const
 {
-	DYNVAR_RETURN (bool, this, "DT_TFPlayer", "m_PlayerClass", "m_bCustomModelRotationSet");
+	NETVAR_RETURN (bool, this, "DT_TFPlayer", "m_PlayerClass", "m_bCustomModelRotationSet");
 }
 
-QAngle &CBaseEntity::GetCustomModelRotation ()
+QAngle &CBaseEntity::GetCustomModelRotation () const
 {
-	DYNVAR_RETURN (QAngle &, this, "DT_TFPlayer", "m_PlayerClass", "m_vecCustomModelRotation");
+	NETVAR_RETURN (QAngle &, this, "DT_TFPlayer", "m_PlayerClass", "m_vecCustomModelRotation");
 }
 
-float &CBaseEntity::GetModelScale ()
+float &CBaseEntity::GetModelScale () const
 {
-	DYNVAR_RETURN (float &, this, "DT_BaseAnimating", "m_flModelScale");
+	NETVAR_RETURN (float &, this, "DT_BaseAnimating", "m_flModelScale");
 }
 
-bool CBaseEntity::IsCritBoosted ()
+bool CBaseEntity::IsCritBoosted () const
 {
 	int &cond   = GetCond ();
 	int &condEx = GetCondEx ();
@@ -375,84 +375,89 @@ bool CBaseEntity::IsCritBoosted ()
 	return false;
 }
 
-float CBaseEntity::GetCritMult ()
+float CBaseEntity::GetCritMult () const
 {
 	// we need to do remap value on this
-	DYNVAR (n, float, "DT_TFPlayer", "m_Shared", "m_iCritMult");
+	NETVAR (n, float, "DT_TFPlayer", "m_Shared", "m_iCritMult");
 	return RemapValClamped (n.GetValue (this), 0, 255, 1.0, 4.0);
 }
 
-float CBaseEntity::GetObservedCritChance ()
+float CBaseEntity::GetObservedCritChance () const
 {
-	DYNVAR_RETURN (float, this, "DT_TFWeaponBase", "LocalActiveTFWeaponData", "m_flObservedCritChance");
+	NETVAR_RETURN (float, this, "DT_TFWeaponBase", "LocalActiveTFWeaponData", "m_flObservedCritChance");
 }
 
-bool CBaseEntity::IsEffectActive (int effects)
+bool CBaseEntity::IsEffectActive (int effects) const
 {
-	DYNVAR (n, int, "DT_BaseEntity", "m_fEffects");
+	NETVAR (n, int, "DT_BaseEntity", "m_fEffects");
 	return (n.GetValue (this) & effects) != 0;
 }
 
-int CBaseEntity::GetModelIndex ()
+int CBaseEntity::GetModelIndex () const
 {
-	DYNVAR_RETURN (int, this, "DT_BaseEntity", "m_nModelIndex");
+	NETVAR_RETURN (int, this, "DT_BaseEntity", "m_nModelIndex");
 }
 
-int &CBaseEntity::GetObserverMode ()
+int &CBaseEntity::GetObserverMode () const
 {
-	DYNVAR_RETURN (int &, this, "DT_BasePlayer", "m_iObserverMode");
+	NETVAR_RETURN (int &, this, "DT_BasePlayer", "m_iObserverMode");
 }
 
-bool CBaseCombatCharacter::IsGlowEnabled ()
+int CBaseCombatWeapon::Clip1 ()
 {
-	DYNVAR_RETURN (bool, this, "DT_TFPlayer", "m_bGlowEnabled");
+	NETVAR_RETURN (int, this, "DT_BaseCombatWeapon", "LocalWeaponData", "m_iClip1");
 }
 
-void CBaseCombatCharacter::SetGlowEnabled (bool t)
+bool CBaseCombatCharacter::IsGlowEnabled () const
 {
-	DYNVAR (n, bool, "DT_TFPlayer", "m_bGlowEnabled");
+	NETVAR_RETURN (bool, this, "DT_TFPlayer", "m_bGlowEnabled");
+}
+
+void CBaseCombatCharacter::SetGlowEnabled (bool t) const
+{
+	NETVAR (n, bool, "DT_TFPlayer", "m_bGlowEnabled");
 	return n.SetValue (this, t);
 }
 
-int CObject::GetLevel ()
+int CObject::GetLevel () const
 {
-	DYNVAR_RETURN (int, this, "DT_BaseObject", "m_iUpgradeLevel");
+	NETVAR_RETURN (int, this, "DT_BaseObject", "m_iUpgradeLevel");
 }
 
-bool CObject::IsSapped ()
+bool CObject::IsSapped () const
 {
-	DYNVAR_RETURN (int, this, "DT_BaseObject", "m_bHasSapper");
+	NETVAR_RETURN (int, this, "DT_BaseObject", "m_bHasSapper");
 }
 
-bool CObject::IsBuilding ()
+bool CObject::IsBuilding () const
 {
-	DYNVAR_RETURN (int, this, "DT_BaseObject", "m_bBuilding");
+	NETVAR_RETURN (int, this, "DT_BaseObject", "m_bBuilding");
 }
 
-float CObject::GetPercentageConstructed ()
+float CObject::GetPercentageConstructed () const
 {
 	if (IsBuilding ()) {
-		DYNVAR_RETURN (int, this, "DT_BaseObject", "m_flPercentageConstructed");
+		NETVAR_RETURN (int, this, "DT_BaseObject", "m_flPercentageConstructed");
 	} else
 		return 0;
 }
 
-int CObject::GetHealth ()
+int CObject::GetHealth () const
 {
-	DYNVAR_RETURN (int, this, "DT_BaseObject", "m_iHealth");
+	NETVAR_RETURN (int, this, "DT_BaseObject", "m_iHealth");
 }
 
-int CObject::GetUpgradedMetal ()
+int CObject::GetUpgradedMetal () const
 {
-	DYNVAR_RETURN (int, this, "DT_BaseObject", "m_iUpgradeMetal");
+	NETVAR_RETURN (int, this, "DT_BaseObject", "m_iUpgradeMetal");
 }
 
-int CObjectTeleporter::GetState ()
+int CObjectTeleporter::GetState () const
 {
-	DYNVAR_RETURN (int, this, "DT_ObjectTeleporter", "m_iState");
+	NETVAR_RETURN (int, this, "DT_ObjectTeleporter", "m_iState");
 }
 
-const char *CObjectTeleporter::GetStateString ()
+const char *CObjectTeleporter::GetStateString () const
 {
 	switch (GetState ()) {
 	case 1: {
@@ -472,30 +477,30 @@ const char *CObjectTeleporter::GetStateString ()
 	return "Unknown";
 }
 
-int CObjectSentryGun::GetRocket ()
+int CObjectSentryGun::GetRocket () const
 {
 	if (GetLevel () == 3) {
-		DYNVAR_RETURN (int, this, "DT_ObjectSentrygun", "m_iAmmoRockets");
+		NETVAR_RETURN (int, this, "DT_ObjectSentrygun", "m_iAmmoRockets");
 	}
 	return NULL;
 }
 
-int CObjectSentryGun::GetAmmo ()
+int CObjectSentryGun::GetAmmo () const
 {
-	DYNVAR_RETURN (int, this, "DT_ObjectSentrygun", "m_iAmmoShells");
+	NETVAR_RETURN (int, this, "DT_ObjectSentrygun", "m_iAmmoShells");
 }
 
-bool CObjectSentryGun::IsControlled ()
+bool CObjectSentryGun::IsControlled () const
 {
-	DYNVAR_RETURN (bool, this, "DT_ObjectSentrygun", "m_bPlayerControlled");
+	NETVAR_RETURN (bool, this, "DT_ObjectSentrygun", "m_bPlayerControlled");
 }
 
-int CObjectSentryGun::GetState ()
+int CObjectSentryGun::GetState () const
 {
-	DYNVAR_RETURN (int, this, "DT_ObjectSentrygun", "m_iState");
+	NETVAR_RETURN (int, this, "DT_ObjectSentrygun", "m_iState");
 }
 
-const char *CObjectSentryGun::GetStateString ()
+const char *CObjectSentryGun::GetStateString () const
 {
 	switch (GetState ()) {
 	case 1: {
@@ -511,7 +516,7 @@ const char *CObjectSentryGun::GetStateString ()
 	return "Unknown";
 }
 
-int CObjectDispenser::GetMetalReserve ()
+int CObjectDispenser::GetMetalReserve () const
 {
-	DYNVAR_RETURN (int, this, "DT_ObjectDispenser", "m_iAmmoMetal");
+	NETVAR_RETURN (int, this, "DT_ObjectDispenser", "m_iAmmoMetal");
 }

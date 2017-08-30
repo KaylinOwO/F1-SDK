@@ -34,7 +34,7 @@ public:
 
 LONG UnhandledSehExceptionFilter (EXCEPTION_POINTERS *e, bool silent, const char *name = "");
 LONG WINAPI UnhandledSehExceptionHandler (EXCEPTION_POINTERS *e);
-
+LONG CALLBACK UnhandledVectoredExceptionHandler (EXCEPTION_POINTERS *e);
 #endif
 
 // stuff for try and catch

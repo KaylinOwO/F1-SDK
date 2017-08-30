@@ -41,7 +41,7 @@ void allocConsole ()
 }
 
 // assumes the entity is valid
-bool bulletTime (CBaseEntity *pLocalEntity)
+bool bulletTime (const CBaseEntity *pLocalEntity)
 {
 
 	int tickBase = pLocalEntity->GetTickBase ();
@@ -77,15 +77,9 @@ Vector EstimateAbsVelocity (CBaseEntity *ent)
 {
 	typedef void(__thiscall * EstimateAbsVelocityFn) (CBaseEntity *, Vector &);
 
-	static DWORD dwFn =
-	    gSignatures.GetClientSignature (
-	        "E8 ? ? ? ? F3 0F 10 4D ? 8D 85 ? ? ? ? F3 0F 10 45 ? F3 0F 59 C9 "
-	        "56 F3 0F 59 C0 F3 0F 58 C8 0F 2F 0D ? ? ? ? 76 07") +
-	    0x1;
+	static DWORD dwFn = gSignatures.GetClientSignature ("55 8B EC 83 EC 0C 56 8B F1 E8 ? ? ? ? 3B F0");
 
-	static DWORD dwEstimate = ((*(PDWORD) (dwFn)) + dwFn + 4);
-
-	EstimateAbsVelocityFn vel = (EstimateAbsVelocityFn)dwEstimate;
+	EstimateAbsVelocityFn vel = (EstimateAbsVelocityFn)dwFn;
 
 	Vector v;
 	vel (ent, v);
@@ -262,26 +256,27 @@ DWORD redGreenGradiant (int i, int max)
 	return redGreenGradiant (percent);
 }
 
-mstudiohitboxset_t *GetHitboxset (DWORD *pHeader)
+mstudiohitboxset_t *GetHitboxset (studiohdr_t *pHeader)
 {
-	int HitboxSetIndex = *(int *)((DWORD)pHeader + 0xB0);
-	return (mstudiohitboxset_t *)(((PBYTE)pHeader) + HitboxSetIndex);
-}
-
-mstudiobbox_t *GetHitbox (int iHitbox, DWORD *pHeader)
-{
-	return GetHitboxset (pHeader)->pHitbox (iHitbox);
+	return pHeader->pHitboxSet (0);
 }
 
 int GetNumHitboxes (CBaseEntity *ent)
 {
-	// OPTIMISE:
-	auto *model   = ent->GetModel ();
-	auto *pHeader = gInts->ModelInfo->GetStudiomodel (model);
+	return GetHitboxset (gInts->ModelInfo->GetStudioModel (ent->GetModel ()))->numhitboxes;
+}
 
-	int                 HitboxSetIndex = *(int *)((DWORD)pHeader + 0xB0);
-	mstudiohitboxset_t *pSet           = (mstudiohitboxset_t *)(((PBYTE)pHeader) + HitboxSetIndex);
-	return pSet->numhitboxes;
+int GetNumHitboxes (studiohdr_t *pHeader)
+{
+	return GetHitboxset (pHeader)->numhitboxes;
+}
+
+mstudiobbox_t *GetHitbox (int iHitbox, studiohdr_t *pHeader)
+{
+	if (iHitbox <= GetNumHitboxes (pHeader))
+		return GetHitboxset (pHeader)->pHitbox (iHitbox);
+
+	return nullptr;
 }
 
 //-----------------------------------------------------------------------------
@@ -310,12 +305,12 @@ bool CFlaggedEntitiesEnum::AddToList (CBaseEntity *pEntity)
 
 IterationRetval_t CFlaggedEntitiesEnum::EnumElement (IHandleEntity *pHandleEntity)
 {
-	CBaseEntity *pEntity = GetBaseEntity (pHandleEntity);
+	const CBaseEntity *pEntity = GetBaseEntity (pHandleEntity);
 	if (pEntity) {
 		if (m_flagMask && !(pEntity->GetFlags () & m_flagMask)) // Does it meet the criteria?
 			return ITERATION_CONTINUE;
 
-		if (!AddToList (pEntity))
+		if (!AddToList (const_cast<CBaseEntity *> (pEntity)))
 			return ITERATION_STOP;
 	}
 
@@ -359,12 +354,16 @@ F1_Point CUtil::getMousePos ()
 // This does what the SDK does, whether that be bad or good
 extern void GetBoneTransform (int index, int iBone, matrix3x4_t &pBoneToWorld);
 
+extern Vector F1_GetBoneTransform (CBaseEntity *ent, int iBone);
+
 void GetBonePosition (int index, int iBone, Vector &origin, QAngle &angles)
 {
 	matrix3x4_t bonetoworld;
 	GetBoneTransform (index, iBone, bonetoworld);
 
 	MatrixAngles (bonetoworld, angles, origin);
+
+	//origin = F1_GetBoneTransform (GetBaseEntity (index), iBone);
 }
 
 static Vector hullcolor[8] = {
@@ -372,10 +371,11 @@ static Vector hullcolor[8] = {
     Vector (1.0, 1.0, 0.5), Vector (0.5, 0.5, 1.0), Vector (1.0, 0.5, 1.0),
     Vector (0.5, 1.0, 1.0), Vector (1.0, 1.0, 1.0)};
 
-void DrawClientHitboxes (CBaseEntity *pBaseEntity, float duration, bool monocolor)
+void DrawClientHitboxes (const CBaseEntity *pBaseEntity, float duration, bool monocolor)
 {
-	DWORD *pStudioHdr = gInts->ModelInfo->GetStudiomodel (pBaseEntity->GetModel ());
-	if (!pStudioHdr)
+	auto pStudioHdr = gInts->ModelInfo->GetStudioModel (pBaseEntity->GetModel ());
+
+	if (pStudioHdr == nullptr)
 		return;
 
 	mstudiohitboxset_t *set = GetHitboxset (pStudioHdr);

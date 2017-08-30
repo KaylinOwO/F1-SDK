@@ -124,29 +124,42 @@ public:
 		off = gNetvars.get_offset (a...) + offset;
 	}
 
-	T &GetValue (PVOID base)
+	template <typename B>
+	T &GetValue (B base) const
+	{
+		return GetValue ((PVOID)base);
+	}
+
+	T &GetValue (PVOID base) const
 	{
 		return *reinterpret_cast<sT *> ((DWORD)base + (DWORD)off);
 	}
-	void SetValue (PVOID base, T val)
+
+	template <typename B>
+	void SetValue (B base, T val) const
+	{
+		return SetValue ((PVOID)base, val);
+	}
+
+	void SetValue (const PVOID base, T val) const
 	{
 		*reinterpret_cast<sT *> ((DWORD) (base) + ((DWORD) (off))) = val;
 	}
-	DWORD GetOffset ()
+	DWORD GetOffset () const
 	{
 		return off;
 	}
 };
 
-#define DYNVAR(name, type, ...) static Netvar<type> name (__VA_ARGS__)
-#define DYNVAR_RETURN(type, base, ...) \
-	DYNVAR (n, type, __VA_ARGS__);     \
+#define NETVAR(name, type, ...) static Netvar<type> name (__VA_ARGS__)
+#define NETVAR_RETURN(type, base, ...) \
+	NETVAR (n, type, __VA_ARGS__);     \
 	return n.GetValue (base)
-#define DYNVAR_RETURN_THIS(type, ...) \
-	DYNVAR (n, type &, __VA_ARGS__);  \
+#define NETVAR_RETURN_THIS(type, ...) \
+	NETVAR (n, type &, __VA_ARGS__);  \
 	return n.GetValue (this)
 
-#define DYNVAR_OFF(name, type, offset, ...) static Netvar<type> name (offset, __VA_ARGS__)
-#define DYNVAR_OFF_RETURN(type, base, offset, ...) \
-	DYNVAR_OFF (n, type, offset, __VA_ARGS__);     \
+#define NETVAR_OFF(name, type, offset, ...) static Netvar<type> name (offset, __VA_ARGS__)
+#define NETVAR_OFF_RETURN(type, base, offset, ...) \
+	NETVAR_OFF (n, type, offset, __VA_ARGS__);     \
 	return n.GetValue (base)

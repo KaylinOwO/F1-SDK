@@ -3,10 +3,19 @@
 
 CHookManager gHookManager;
 
+void DeleteHook (void *address, unsigned offset)
+{
+	__try {
+		delete gHookManager.findOrCreateHook (address, offset);
+	} __except (EXCEPTION_EXECUTE_HANDLER) {
+		// do nothing
+	}
+}
+
 CHookManager::~CHookManager ()
 {
 	for (auto &h : hookedMethods) {
-		delete findOrCreateHook (h.first.first, h.first.second);
+		DeleteHook (h.first.first, h.first.second);
 	}
 
 	// this gets called by FreeLibraryAndExitThread so we need to sleep here
@@ -25,7 +34,7 @@ VMTBaseManager *CHookManager::findOrCreateHook (void *address, unsigned offset)
 		return &VMTBaseManager::GetHook ((void *)address, offset);
 	} else {
 		hookedMethods[std::make_pair (address, offset)] = {0};
-		auto hook                                       = new VMTBaseManager ();
+		auto hook = new VMTBaseManager ();
 
 		hook->Init (address, offset);
 

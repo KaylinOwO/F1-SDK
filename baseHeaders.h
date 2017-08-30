@@ -112,9 +112,9 @@ enum
 enum
 {
 	SUBCHANNEL_FREE = 0, // subchannel is free to use
-	SUBCHANNEL_TOSEND,   // subchannel has data, but not send yet
-	SUBCHANNEL_WAITING,  // sbuchannel sent data, waiting for ACK
-	SUBCHANNEL_DIRTY,    // subchannel is marked as dirty during changelevel
+	SUBCHANNEL_TOSEND, // subchannel has data, but not send yet
+	SUBCHANNEL_WAITING, // sbuchannel sent data, waiting for ACK
+	SUBCHANNEL_DIRTY, // subchannel is marked as dirty during changelevel
 };
 
 // typedef DWORD IDemoRecorder;
@@ -132,7 +132,7 @@ typedef enum {
 	eQueryCvarValueStatus_ValueIntact   = 0, // It got the value fine.
 	eQueryCvarValueStatus_CvarNotFound  = 1,
 	eQueryCvarValueStatus_NotACvar      = 2, // There's a ConCommand, but it's not a ConVar.
-	eQueryCvarValueStatus_CvarProtected = 3  // The cvar was marked with FCVAR_SERVER_CAN_NOT_QUERY, so the server is not allowed to have its value.
+	eQueryCvarValueStatus_CvarProtected = 3 // The cvar was marked with FCVAR_SERVER_CAN_NOT_QUERY, so the server is not allowed to have its value.
 } EQueryCvarValueStatus;
 
 // TODO: why is this here
@@ -148,10 +148,10 @@ inline void quickCrash ()
 
 // some helper functions for less typing
 // TODO: these should really be defined in SDK.h
-CBaseEntity *GetBaseEntity (int index);
-CBaseEntity *GetBaseEntity (CHandle<CBaseEntity> handle);
-CBaseEntity *GetBaseEntity (IHandleEntity *handle);
-CBaseEntity *GetLocalPlayer ();
+CBaseEntity *const GetBaseEntity (int index);
+CBaseEntity *const GetBaseEntity (CHandle<CBaseEntity> handle);
+CBaseEntity *const GetBaseEntity (IHandleEntity *handle);
+CBaseEntity *const GetLocalPlayer ();
 
 enum HitboxMasks
 {

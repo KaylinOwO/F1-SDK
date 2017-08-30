@@ -25,6 +25,11 @@
 #include "prediction.h"
 #include <iconvar.h>
 
+#ifndef __AUTOGEN
+#define __AUTOGEN
+#include "SDK_AutoGen.h"
+#endif
+
 class CGameTrace;
 typedef CGameTrace trace_t;
 struct Ray_t;
@@ -83,6 +88,8 @@ public:
 	int GetLocalPlayerIndex (void);
 
 	float Time (void);
+
+	float GetLastTimeStamp (void);
 
 	void GetViewAngles (QAngle &va);
 
@@ -234,9 +241,9 @@ public:
 class CModelInfo
 {
 public:
-	const char *GetModelName (DWORD *model);
+	const char *GetModelName (model_t *model);
 
-	DWORD *GetStudiomodel (DWORD *model);
+	studiohdr_t *GetStudioModel (model_t *model);
 
 	int GetModelMaterialCount (model_t *model);
 
@@ -325,20 +332,20 @@ public:
 		hasbeenpredicted = src.hasbeenpredicted;
 	}
 
-	virtual ~CUserCmd (){};  // Destructor 0
-	int    command_number;   // 4
-	int    tick_count;       // 8
-	QAngle viewangles;       // C
-	float  forwardmove;      // 18
-	float  sidemove;         // 1C
-	float  upmove;           // 20
-	int    buttons;          // 24
-	BYTE   impulse;          // 28
-	int    weaponselect;     // 2C
-	int    weaponsubtype;    // 30
-	int    random_seed;      // 34
-	short  mousedx;          // 38
-	short  mousedy;          // 3A
+	virtual ~CUserCmd (){}; // Destructor 0
+	int    command_number; // 4
+	int    tick_count; // 8
+	QAngle viewangles; // C
+	float  forwardmove; // 18
+	float  sidemove; // 1C
+	float  upmove; // 20
+	int    buttons; // 24
+	BYTE   impulse; // 28
+	int    weaponselect; // 2C
+	int    weaponsubtype; // 30
+	int    random_seed; // 34
+	short  mousedx; // 38
+	short  mousedy; // 3A
 	bool   hasbeenpredicted; // 3C;
 };
 
@@ -406,11 +413,11 @@ public:
 	virtual const matrix3x4 *GetRootParentToWorldTransform () const = 0;
 };
 
-class CBaseEntity
+class CBaseEntity : public DT_BaseEntity
 {
 public:
 	template <typename T>
-	T get (DWORD off)
+	T get (DWORD off) const
 	{
 		return *(typename std::remove_reference<T>::type *)((DWORD)this + off);
 	}
@@ -421,167 +428,167 @@ public:
 		return;
 	}
 
-	CBaseHandle GetRefEHandle ();
+	CBaseHandle GetRefEHandle () const;
 
-	ICollideable *GetCollideable ();
+	ICollideable *GetCollideable () const;
 
-	Vector &GetAbsOrigin ();
+	Vector &GetAbsOrigin () const;
 
-	void SetAbsOrigin (Vector &o);
+	void SetAbsOrigin (Vector &o) const;
 
-	QAngle &GetAbsAngles ();
+	QAngle &GetAbsAngles () const;
 
-	void SetAbsAngles (QAngle &a);
+	void SetAbsAngles (QAngle &a) const;
 
-	void GetWorldSpaceCenter (Vector &vWorldSpaceCenter);
+	void GetWorldSpaceCenter (Vector &vWorldSpaceCenter) const;
 
-	bool IsBaseCombatWeapon ();
+	bool IsBaseCombatWeapon () const;
 
-	bool Interpolate (float currentTime);
+	bool Interpolate (float currentTime) const;
 
-	DWORD *GetModel ();
-	int    DrawModel (int flags);
+	model_t *GetModel () const;
+	int      DrawModel (int flags) const;
 
-	class CStudioHdr *GetStudioHdr ();
+	const class CStudioHdr *GetStudioHdr () const;
 
-	bool SetupBones (matrix3x4 *pBoneToWorldOut, int nMaxBones, int boneMask, float currentTime);
+	bool SetupBones (matrix3x4 *pBoneToWorldOut, int nMaxBones, int boneMask, float currentTime) const;
 
-	ClientClass *GetClientClass ();
+	const ClientClass *GetClientClass () const;
 
-	bool IsDormant ();
+	bool IsDormant () const;
 
-	int GetIndex ();
+	const int GetIndex () const;
 
-	void GetRenderBounds (Vector &mins, Vector &maxs);
+	void GetRenderBounds (Vector &mins, Vector &maxs) const;
 
-	QAngle &GetPrevLocalAngles ();
+	QAngle &GetPrevLocalAngles () const;
 
-	int GetHealth ();
+	int GetHealth () const;
 
-	BYTE GetLifeState ();
+	BYTE GetLifeState () const;
 
-	bool IsAlive ();
+	bool IsAlive () const;
 
-	int GetTeam ();
+	int GetTeam () const;
 
-	tf_classes GetClass ();
+	tf_classes GetClass () const;
 
-	int &GetFlags ();
+	int &GetFlags () const;
 
-	class CBaseCombatWeapon *GetActiveWeapon ();
+	class CBaseCombatWeapon *GetActiveWeapon () const;
 
-	bool IsReadyToBackstab ();
+	bool IsReadyToBackstab () const;
 
-	Vector &GetViewOffset ();
+	Vector &GetViewOffset () const;
 
-	Vector GetViewPos ();
+	Vector GetViewPos () const;
 
-	float GetChargeDamage ();
+	float GetChargeDamage () const;
 
-	int &GetTickBase ();
+	int &GetTickBase () const;
 
-	float GetNextAttack ();
+	float GetNextAttack () const;
 
-	float GetLastFireTime ();
+	float GetLastFireTime () const;
 
-	Vector &GetVelocity ();
+	Vector &GetVelocity () const;
 
-	int &GetCond ();
-	int &GetCondEx ();
-	int &GetCondEx2 ();
-	int &GetCondEx3 ();
+	int &GetCond () const;
+	int &GetCondEx () const;
+	int &GetCondEx2 () const;
+	int &GetCondEx3 () const;
 
-	void SetCond (int c);
+	void SetCond (int c) const;
 
-	bool IsZoomed ();
+	bool IsZoomed () const;
 
 	void SetZoomed (bool state);
 
-	QAngle &GetPunchAngles ();
+	QAngle &GetPunchAngles () const;
 
-	CBaseEntity *GetOwner ();
+	CBaseEntity *GetOwner () const;
 
-	moveTypes GetMoveType ();
+	moveTypes GetMoveType () const;
 
-	ICollideable *GetCollision ();
+	ICollideable *GetCollision () const;
 
 	matrix3x4 &GetRgflCoordinateFrame ();
 
-	int GetRoundState ();
+	int GetRoundState () const;
 
-	int GetFov ();
+	int GetFov () const;
 
-	void SetFov (int fov);
+	void SetFov (int fov) const;
 
-	QAngle &GetRotation ();
+	QAngle &GetRotation () const;
 
-	Vector &GetRenderOrigin ();
+	Vector &GetRenderOrigin () const;
 
-	float GetChargeTime ();
+	float GetChargeTime () const;
 
-	float GetZoomTime ();
+	float GetZoomTime () const;
 
-	float &GetAnimTime ();
-	float &GetOldAnimTime ();
+	float &GetAnimTime () const;
+	float &GetOldAnimTime () const;
 
-	float &GetSimulationTime ();
-	float &GetOldSimulationTime ();
+	float &GetSimulationTime () const;
+	float &GetOldSimulationTime () const;
 
-	void SetSimulationTime (float t);
+	void SetSimulationTime (float t) const;
 
-	int GetItemDefinitionIndex ();
+	int GetItemDefinitionIndex () const;
 
-	Vector &GetCollideableMinsPrescaled ();
+	Vector &GetCollideableMinsPrescaled () const;
 
-	Vector &GetCollideableMaxsPrescaled ();
+	Vector &GetCollideableMaxsPrescaled () const;
 
-	Vector &GetCollideableMins ();
+	Vector &GetCollideableMins () const;
 
-	Vector &GetCollideableMaxs ();
+	Vector &GetCollideableMaxs () const;
 
-	CBaseEntity *GetGroundEntity ();
+	CBaseEntity *GetGroundEntity () const;
 
-	bool IsTouchingGround ();
+	bool IsTouchingGround () const;
 
-	float GetMaxSpeed ();
+	float GetMaxSpeed () const;
 
-	int &GetSequence ();
-	void SetSequence (int seq);
+	int &GetSequence () const;
+	void SetSequence (int seq) const;
 
-	float &GetCycle ();
-	void   SetCycle (int cyc);
+	float &GetCycle () const;
+	void   SetCycle (int cyc) const;
 
-	float &GetPlaybackRate ();
+	float &GetPlaybackRate () const;
 
-	C_AnimationLayer *GetAnimOverlay (int index);
+	C_AnimationLayer *GetAnimOverlay (int index) const;
 
-	int GetNumAnimOverlays ();
+	int GetNumAnimOverlays () const;
 
-	void SetSize (Vector &mins, Vector &maxs);
+	void SetSize (Vector &mins, Vector &maxs) const;
 
-	QAngle GetEyeAngles ();
-	void   SetEyeAngles (QAngle ang);
+	QAngle GetEyeAngles () const;
+	void   SetEyeAngles (QAngle ang) const;
 
-	bool UseClassAnimations ();
+	bool UseClassAnimations () const;
 
-	Vector &GetCustomModelOffset ();
+	Vector &GetCustomModelOffset () const;
 
-	bool    GetCustomModelRotates ();
-	bool    GetCustomModelRotationSet ();
-	QAngle &GetCustomModelRotation ();
+	bool    GetCustomModelRotates () const;
+	bool    GetCustomModelRotationSet () const;
+	QAngle &GetCustomModelRotation () const;
 
-	float &GetModelScale ();
+	float &GetModelScale () const;
 
-	bool  IsCritBoosted ();
-	float GetCritMult ();
-	float GetAttributeFloat (float value, const char *attrib);
-	float GetObservedCritChance ();
+	bool  IsCritBoosted () const;
+	float GetCritMult () const;
+	float GetAttributeFloat (float value, const char *attrib) const;
+	float GetObservedCritChance () const;
 
-	bool IsEffectActive (int effects);
+	bool IsEffectActive (int effects) const;
 
-	int GetModelIndex ();
+	int GetModelIndex () const;
 
-	int &GetObserverMode ();
+	int &GetObserverMode () const;
 };
 
 // allows upcasting without showing casts
@@ -591,7 +598,7 @@ public:
 		return (type *)pEnt;                        \
 	}
 
-class CBaseCombatWeapon : public CBaseEntity
+class CBaseCombatWeapon : public CBaseEntity, public DT_BaseCombatWeapon
 {
 public:
 	DEFINE_FROM_BASEENTITY (CBaseCombatWeapon);
@@ -621,14 +628,14 @@ public:
 	float GetProjectileGravity ();
 };
 
-class CTFBaseWeapon : public CBaseCombatWeapon
+class CTFBaseWeapon : public CBaseCombatWeapon, public DT_TFWeaponBase
 {
 public:
 	// TODO impl necessary functions here
 	DEFINE_FROM_BASEENTITY (CTFBaseWeapon);
 };
 
-class CTFBaseWeaponGun : public CTFBaseWeapon
+class CTFBaseWeaponGun : public CTFBaseWeapon, public DT_TFWeaponBaseGun
 {
 public:
 	DEFINE_FROM_BASEENTITY (CTFBaseWeaponGun);
@@ -636,7 +643,7 @@ public:
 	float WeaponGetSpread ();
 };
 
-class CBaseCombatCharacter : public CBaseEntity
+class CBaseCombatCharacter : public CBaseEntity, public DT_BaseCombatCharacter
 {
 public:
 	DEFINE_FROM_BASEENTITY (CBaseCombatCharacter);
@@ -645,12 +652,12 @@ public:
 
 	void DestroyGlowEffect ();
 
-	bool IsGlowEnabled ();
+	bool IsGlowEnabled () const;
 
-	void SetGlowEnabled (bool t);
+	void SetGlowEnabled (bool t) const;
 };
 
-class CTFBaseWeaponMelee : public CTFBaseWeapon
+class CTFBaseWeaponMelee : public CTFBaseWeapon, public DT_TFWeaponBaseMelee
 {
 public:
 	DEFINE_FROM_BASEENTITY (CTFBaseWeaponMelee);
@@ -662,49 +669,55 @@ private:
 	bool CalcIsAttackCriticalHelper ();
 };
 
-class CObject : public CBaseEntity
+class CObject : public CBaseEntity, public DT_BaseObject
 {
 public:
-	int GetLevel ();
+	int GetLevel () const;
 
-	bool IsSapped ();
+	bool IsSapped () const;
 
-	bool IsBuilding ();
+	bool IsBuilding () const;
 
-	float GetPercentageConstructed ();
+	float GetPercentageConstructed () const;
 
-	int GetHealth ();
+	int GetHealth () const;
 
-	int GetUpgradedMetal ();
+	int GetUpgradedMetal () const;
 };
 
-class CObjectDispenser : public CObject
+class CObjectDispenser : public CObject, public DT_ObjectDispenser
 {
 public:
-	int GetMetalReserve ();
+	int GetMetalReserve () const;
 };
 
-class CObjectSentryGun : public CObject
+class CObjectSentryGun : public CObject, public DT_ObjectSentrygun
 {
 public:
-	int GetRocket ();
+	int GetRocket () const;
 
-	int GetAmmo ();
+	int GetAmmo () const;
 
-	bool IsControlled ();
+	bool IsControlled () const;
 
-	int GetState ();
+	int GetState () const;
 
-	const char *GetStateString ();
+	const char *GetStateString () const;
 };
 
-class CObjectTeleporter : public CObject
+class CObjectTeleporter : public CObject, public DT_ObjectTeleporter
 {
 public:
-	int GetState ();
+	int GetState () const;
 
-	const char *GetStateString ();
+	const char *GetStateString () const;
 };
+
+class CBasePlayer : public CBaseEntity, public DT_BasePlayer
+{
+public:
+};
+
 // extern playerVars_t gLocalPlayerVars;
 
 class CHack;

@@ -2,13 +2,15 @@
 
 #pragma clang system_header
 
+#if _MSC_VER > 1900
+
 template <int X>
 struct EnsureCompileTime
 {
-    enum : int
-    {
-        Value = X
-    };
+	enum : int
+	{
+		Value = X
+	};
 };
 
 // Use Compile-Time as seed
@@ -16,7 +18,7 @@ struct EnsureCompileTime
 
 constexpr int LinearCongruentGenerator (int Rounds)
 {
-    return 1013904223 + 1664525 * ((Rounds > 0) ? LinearCongruentGenerator (Rounds - 1) : SEED & 0xFFFFFFFF);
+	return 1013904223 + 1664525 * ((Rounds > 0) ? LinearCongruentGenerator (Rounds - 1) : SEED & 0xFFFFFFFF);
 }
 
 #define Random() EnsureCompileTime<LinearCongruentGenerator (10)>::Value // 10 Rounds
@@ -32,24 +34,24 @@ struct Append;
 template <int... Left, int Right>
 struct Append<IndexList<Left...>, Right>
 {
-    typedef IndexList<Left..., Right> Result;
+	typedef IndexList<Left..., Right> Result;
 };
 
 template <int N>
 struct ConstructIndexList
 {
-    typedef typename Append<typename ConstructIndexList<N - 1>::Result, N - 1>::Result Result;
+	typedef typename Append<typename ConstructIndexList<N - 1>::Result, N - 1>::Result Result;
 };
 template <>
 struct ConstructIndexList<0>
 {
-    typedef IndexList<> Result;
+	typedef IndexList<> Result;
 };
 
 const char     XORKEY = static_cast<char> (RandomNumber (0, 0xFF));
 constexpr char EncryptCharacter (const char Character, int Index)
 {
-    return Character ^ (XORKEY + Index);
+	return Character ^ (XORKEY + Index);
 }
 
 template <typename IndexList>
@@ -58,27 +60,31 @@ template <int... Index>
 class CXorString<IndexList<Index...>>
 {
 private:
-    char Value[sizeof...(Index) + 1];
+	char Value[sizeof...(Index) + 1];
 
 public:
-    __forceinline constexpr CXorString (const char *const String)
-        : Value{EncryptCharacter (String[Index], Index)...}
-    {
-    }
+	__forceinline constexpr CXorString (const char *const String)
+	    : Value{EncryptCharacter (String[Index], Index)...}
+	{
+	}
 
-    __declspec(noinline) char *decrypt ()
-    {
-        for (int t = 0; t < sizeof...(Index); t++) {
-            Value[t] = Value[t] ^ (XORKEY + t);
-        }
-        Value[sizeof...(Index)] = '\0';
-        return Value;
-    }
+	__declspec(noinline) char *decrypt ()
+	{
+		for (int t = 0; t < sizeof...(Index); t++) {
+			Value[t] = Value[t] ^ (XORKEY + t);
+		}
+		Value[sizeof...(Index)] = '\0';
+		return Value;
+	}
 
-    char *get ()
-    {
-        return Value;
-    }
+	char *get ()
+	{
+		return Value;
+	}
 };
 #define XorS(X, String) CXorString<ConstructIndexList<sizeof (String) - 1>::Result> X (String)
 #define XorString(String) (CXorString<ConstructIndexList<sizeof (String) - 1>::Result> (String).decrypt ())
+#else
+#define XorString(X) X
+#define XorS(X, String) String
+#endif

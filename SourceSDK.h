@@ -79,6 +79,8 @@
 
 #include <valve_minmax_off.h>
 
+using EHANDLE = CHandle<CBaseEntity>;
+
 #undef TICK_INTERVAL
 #undef TIME_TO_TICKS
 #undef TICKS_TO_TIME

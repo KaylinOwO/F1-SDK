@@ -7,7 +7,7 @@ CRC32_t GetChecksumForCmd (CUserCmd userCmd);
 void allocConsole ();
 
 // assumes the entity is valid
-bool bulletTime (CBaseEntity *pLocalEntity);
+bool bulletTime (const CBaseEntity *pLocalEntity);
 
 void generateItemList ();
 
@@ -29,9 +29,9 @@ DWORD redGreenGradiant (float percent);
 
 DWORD redGreenGradiant (int i, int max);
 
-mstudiohitboxset_t *GetHitboxset (DWORD *pHeader);
+mstudiohitboxset_t *GetHitboxset (studiohdr_t *pHeader);
 
-mstudiobbox_t *GetHitbox (int iHitbox, DWORD *pHeader);
+mstudiobbox_t *GetHitbox (int iHitbox, studiohdr_t *pHeader);
 
 int GetNumHitboxes (CBaseEntity *ent);
 
@@ -119,4 +119,4 @@ public:
 	static F1_Point getMousePos ();
 };
 
-void DrawClientHitboxes (CBaseEntity *pBaseEntity, float duration, bool monocolor);
+void DrawClientHitboxes (const CBaseEntity *pBaseEntity, float duration, bool monocolor);

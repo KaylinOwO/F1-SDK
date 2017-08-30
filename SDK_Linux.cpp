@@ -355,13 +355,13 @@ void CHLClient::RenderView (CViewSetup const &view, int nClearFlags, int whatToD
 	return getvfunc<OriginalFn> (this, 27) (this, view, nClearFlags, whatToDraw);
 }
 
-const char *CModelInfo::GetModelName (DWORD *model)
+const char *CModelInfo::GetModelName (model_t *model)
 {
 	typedef const char *(__thiscall * OriginalFn) (PVOID, DWORD *);
 	return getvfunc<OriginalFn> (this, 4) (this, model);
 }
 
-DWORD *CModelInfo::GetStudiomodel (DWORD *model)
+studiohdr_t *CModelInfo::GetStudioModel (model_t *model)
 {
 	typedef DWORD *(__thiscall * OriginalFn) (PVOID, DWORD *);
 	return getvfunc<OriginalFn> (this, 29) (this, model);
@@ -525,7 +525,7 @@ QAngle &CBaseEntity::GetPrevLocalAngles ()
 
 matrix3x4 &CBaseEntity::GetRgflCoordinateFrame ()
 {
-	// DYNVAR_OFF( n, DWORD, -0x4C, "DT_BaseEntity", "m_CollisionGroup" );
+	// NETVAR_OFF( n, DWORD, -0x4C, "DT_BaseEntity", "m_CollisionGroup" );
 	// return *reinterpret_cast< matrix3x4 * >( n.getValue(this) );
 	typedef matrix3x4 &(__thiscall * OriginalFn) (PVOID);
 	return getvfunc<OriginalFn> (this, 49) (this);
