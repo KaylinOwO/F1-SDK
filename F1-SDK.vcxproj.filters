@@ -1,0 +1,220 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="SourceSDK files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="F1-SDK files">
+      <UniqueIdentifier>{996ab225-1cd6-4f59-aeb1-8f26a62a66ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Precompiled Header">
+      <UniqueIdentifier>{a6ce5ec6-0fc7-4855-a028-037469cf1621}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="backtrace.cpp">
+      <Filter>F1-SDK files</Filter>
+    </ClCompile>
+    <ClCompile Include="CDrawManager.cpp">
+      <Filter>F1-SDK files</Filter>
+    </ClCompile>
+    <ClCompile Include="CEtags.cpp">
+      <Filter>F1-SDK files</Filter>
+    </ClCompile>
+    <ClCompile Include="CGlobalVars.cpp">
+      <Filter>F1-SDK files</Filter>
+    </ClCompile>
+    <ClCompile Include="CHookManager.cpp">
+      <Filter>F1-SDK files</Filter>
+    </ClCompile>
+    <ClCompile Include="CSignature.cpp">
+      <Filter>F1-SDK files</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicNetvars.cpp">
+      <Filter>F1-SDK files</Filter>
+    </ClCompile>
+    <ClCompile Include="F1_Gui.cpp">
+      <Filter>F1-SDK files</Filter>
+    </ClCompile>
+    <ClCompile Include="factory.cpp">
+      <Filter>F1-SDK files</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>F1-SDK files</Filter>
+    </ClCompile>
+    <ClCompile Include="netmessage.cpp">
+      <Filter>F1-SDK files</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK_Linux.cpp">
+      <Filter>F1-SDK files</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK_Shared.cpp">
+      <Filter>F1-SDK files</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK_Win32.cpp">
+      <Filter>F1-SDK files</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceSDK.cpp">
+      <Filter>F1-SDK files</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>F1-SDK files</Filter>
+    </ClCompile>
+    <ClCompile Include="VMTHooks.cpp">
+      <Filter>F1-SDK files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Precompiled Header</Filter>
+    </ClCompile>
+    <ClCompile Include="sourcesdk\public\bone_setup.cpp">
+      <Filter>SourceSDK files</Filter>
+    </ClCompile>
+    <ClCompile Include="sourcesdk\tier1\convar.cpp">
+      <Filter>SourceSDK files</Filter>
+    </ClCompile>
+    <ClCompile Include="sourcesdk\public\studio.cpp">
+      <Filter>SourceSDK files</Filter>
+    </ClCompile>
+    <ClCompile Include="sourcesdk\public\collisionutils.cpp">
+      <Filter>SourceSDK files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="backtrace.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="backtrace_off.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseAnimatingLayer.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="baseHeaders.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="CClientFrameManager.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="CDrawManager.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="CDumper.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="CEtags.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="CGlobalVars.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="CHookManager.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="ClassId.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="clientstate.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="commonEnums.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="CSignature.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="demo.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="dt_common2.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="dt_recv2.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicNetvars.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="event.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="F1_Gui.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="factory.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="gameEvent.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="getvfunc.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="ignorewarnings_off.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="ignorewarnings_on.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="IHack.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="netmessage.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="netpacket.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="network.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="prediction.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="proto.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenSpaceEffectManager.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK_AutoGen.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceSDK.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="Trace.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="unlinkpeb.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="VMTHooks.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="weaponInfo.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponList.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowsProxy.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+    <ClInclude Include="XorString.h">
+      <Filter>F1-SDK files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,3 +1,5 @@
+#include "baseHeaders.h"
+
 #include "CEtags.h"
 
 #include "../SDK/SDK.h"
@@ -8,9 +10,6 @@ CEntTag::CEntTag (CBaseEntity *ent)
     : tags (EntTag::NO_TAGS)
 {
 	if (ent == nullptr)
-		return;
-
-	if (ent->IsDormant ())
 		return;
 
 	auto c = ent->GetClientClass ()->classId;

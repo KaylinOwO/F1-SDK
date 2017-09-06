@@ -1,9 +1,12 @@
 #pragma once
 
+// !!! PRECOMPILED HEADER !!!
+
 // base, common and standalone headers are defined here
 
 // auto define lean and mean
 #define WIN32_LEAN_AND_MEAN
+#define _CRT_SECURE_NO_WARNINGS
 #undef min
 #undef max
 #include "WindowsProxy.h"
@@ -21,6 +24,8 @@
 
 // SOURCE SDK COMES FIRST
 #include "SourceSDK.h"
+// include the sdk autogen here
+#include "SDK_AutoGen.h"
 
 // DEFINE OVERRIDES HERE
 // use SSE2 for fast sqrt's

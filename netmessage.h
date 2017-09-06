@@ -71,7 +71,7 @@ public:
 	}; // no handler set
 
 protected:
-	bool         m_bReliable;  // true if message should be send reliable
+	bool         m_bReliable; // true if message should be send reliable
 	INetChannel *m_NetChannel; // netchannel this message is from/for
 };
 
@@ -262,8 +262,8 @@ class NET_SetConVar : public CNetMessage
 	{
 		m_ConVars = CUtlVector<cvar_t> ();
 		cvar_t newcvar;
-		strncpy (newcvar.name, name, MAX_OSPATH);
-		strncpy (newcvar.value, value, MAX_OSPATH);
+		V_strncpy (newcvar.name, name, MAX_OSPATH);
+		V_strncpy (newcvar.value, value, MAX_OSPATH);
 		m_ConVars.AddToTail (newcvar);
 	}
 

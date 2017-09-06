@@ -1,3 +1,5 @@
+#include "baseHeaders.h"
+
 #include "../SDK/Util.h"
 
 CRC32_t GetChecksumForCmd (CUserCmd userCmd)

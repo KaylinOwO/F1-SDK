@@ -1,3 +1,5 @@
+#include "baseHeaders.h"
+
 #include "SDK.h"
 
 CBaseEntity *const GetBaseEntity (int index)

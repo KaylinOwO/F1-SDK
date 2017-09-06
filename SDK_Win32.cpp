@@ -1,3 +1,5 @@
+#include "baseHeaders.h"
+
 #include "../SDK/SDK.h"
 
 #include "../SDK/Util.h"
@@ -281,6 +283,7 @@ void CSurface::GetTextSize (unsigned long font, const wchar_t *text, int &wide, 
 
 void CSurface::GetTextSize (unsigned long font, const char *text, int &wide, int &tall)
 {
+	// TODO: this needs to take wchars instead of converting them
 	int length = strlen (text);
 
 	wchar_t *temp = new wchar_t[length + 1];

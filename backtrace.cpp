@@ -1,3 +1,5 @@
+#include "baseHeaders.h"
+
 #include "../SDK/backtrace.h"
 
 #include "../SDK/SDK.h"

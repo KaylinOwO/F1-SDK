@@ -1,3 +1,4 @@
+#include "baseHeaders.h"
 
 #include "CHookManager.h"
 
@@ -34,7 +35,7 @@ VMTBaseManager *CHookManager::findOrCreateHook (void *address, unsigned offset)
 		return &VMTBaseManager::GetHook ((void *)address, offset);
 	} else {
 		hookedMethods[std::make_pair (address, offset)] = {0};
-		auto hook = new VMTBaseManager ();
+		auto hook                                       = new VMTBaseManager ();
 
 		hook->Init (address, offset);
 
