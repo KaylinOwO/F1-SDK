@@ -4,39 +4,6 @@
 
 #include "../SDK/SDK.h"
 
-#ifdef _TRYCATCH
-void sehTranslator (unsigned int code, EXCEPTION_POINTERS *e)
-{
-	// create a new exception base off of these and then throw it.
-	// Log::Error("preparing to throw seh exception!");
-	throw sehException (code, e);
-}
-
-void destructHack ()
-{
-	extern CHack gHack;
-
-	gHack.~CHack ();
-}
-
-void terminateHandler ()
-{
-	Log::Error ("Termination called!");
-
-	destructHack ();
-
-	return;
-}
-
-void unexpectedHandler ()
-{
-	Log::Error ("Unhandled exception!!");
-
-	destructHack ();
-	return;
-}
-#endif
-
 #ifdef _MSC_VER
 
 LONG UnhandledSehExceptionFilter (EXCEPTION_POINTERS *e, bool silent, const char *name)

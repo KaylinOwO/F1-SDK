@@ -45,24 +45,16 @@ void allocConsole ()
 // assumes the entity is valid
 bool bulletTime (const CBaseEntity *pLocalEntity)
 {
-
 	int tickBase = pLocalEntity->GetTickBase ();
 
 	CBaseEntity *pLocalWeapon = pLocalEntity->GetActiveWeapon ();
-
 	if (pLocalWeapon == nullptr)
 		return false;
 
-	float nextAttack = pLocalWeapon->GetNextAttack ();
+	float nextAttack  = pLocalWeapon->GetNextAttack ();
+	bool  canTickbase = nextAttack >= TICKS_TO_TIME (tickBase);
 
-	bool canTickbase = nextAttack >= TICKS_TO_TIME (tickBase);
-
-	// bool canCurTime = nextAttack > tickBase * interval;
-
-	// Log::Console("bullettime? tickbase: %s curTime: %s", canTickbase ? "true"
-	// : "false", canCurTime ? "true" : "false");
-
-	return canTickbase;
+	return !canTickbase;
 }
 
 void generateItemList ()
@@ -165,9 +157,6 @@ int getMaxHealth (tf_classes Class)
 const char *GetTFClassName (tf_classes Class)
 {
 	switch (Class) {
-	case tf_classes::TF2_Invalid:
-		return "Invalid";
-		break;
 	case tf_classes::TF2_Scout:
 		return "Scout";
 		break;
@@ -195,6 +184,7 @@ const char *GetTFClassName (tf_classes Class)
 	case tf_classes::TF2_Engineer:
 		return "Engineer";
 		break;
+	case tf_classes::TF2_Invalid:
 	default:
 		return "Invalid";
 	}
@@ -205,7 +195,7 @@ std::string getPathForDll (HMODULE module)
 	std::string ret;
 
 	char path[MAX_PATH];
-
+#ifdef MSC_VER
 	if (GetModuleFileNameA (module, path, MAX_PATH) != 0) {
 		size_t slash = (size_t)-1;
 
@@ -222,6 +212,7 @@ std::string getPathForDll (HMODULE module)
 			Log::Error ("unable to get path for dll selected");
 		}
 	}
+#endif
 	return ret;
 }
 
@@ -283,6 +274,8 @@ mstudiobbox_t *GetHitbox (int iHitbox, studiohdr_t *pHeader)
 
 //-----------------------------------------------------------------------------
 // class CFlaggedEntitiesEnum
+// code here is stolen from the SDK UTIL_ files
+// TODO: can we just include UTIL_Shared as they already use server client independent code?
 //-----------------------------------------------------------------------------
 
 CFlaggedEntitiesEnum::CFlaggedEntitiesEnum (CBaseEntity **pList, int listMax, int flagMask)
@@ -353,10 +346,8 @@ F1_Point CUtil::getMousePos ()
 	return xy;
 }
 
-// This does what the SDK does, whether that be bad or good
+// You need to implement this yourself.
 extern void GetBoneTransform (int index, int iBone, matrix3x4_t &pBoneToWorld);
-
-extern Vector F1_GetBoneTransform (CBaseEntity *ent, int iBone);
 
 void GetBonePosition (int index, int iBone, Vector &origin, QAngle &angles)
 {
@@ -364,8 +355,6 @@ void GetBonePosition (int index, int iBone, Vector &origin, QAngle &angles)
 	GetBoneTransform (index, iBone, bonetoworld);
 
 	MatrixAngles (bonetoworld, angles, origin);
-
-	//origin = F1_GetBoneTransform (GetBaseEntity (index), iBone);
 }
 
 static Vector hullcolor[8] = {
@@ -373,6 +362,7 @@ static Vector hullcolor[8] = {
     Vector (1.0, 1.0, 0.5), Vector (0.5, 0.5, 1.0), Vector (1.0, 0.5, 1.0),
     Vector (0.5, 1.0, 1.0), Vector (1.0, 1.0, 1.0)};
 
+// this function is probably very expensive and you should recreate it using a better hitbox grabbing method.
 void DrawClientHitboxes (const CBaseEntity *pBaseEntity, float duration, bool monocolor)
 {
 	auto pStudioHdr = gInts->ModelInfo->GetStudioModel (pBaseEntity->GetModel ());
