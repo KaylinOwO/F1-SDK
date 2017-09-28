@@ -572,6 +572,12 @@ int CBaseEntity::GetNumAnimOverlays () const
 	// return *(int *)(this + 2288); // dont ask - check for "%8.4f : %30s : %5.3f : %4.2f : %1d"
 }
 
+void CBaseEntity::UpdateAnimation () const
+{
+	const void *pAnimating = (const void *)(this + 0x4);
+	return getvfunc<void(__thiscall *) (const void *)> (this, 191) (this);
+}
+
 void CBaseEntity::SetSize (Vector &mins, Vector &maxs) const
 {
 	static DWORD dwFunc = gSignatures.GetClientSignature ("55 8B EC 83 EC 28 53 8B 5D 08 56 8B 75 0C 57 8B 03");
@@ -676,7 +682,7 @@ float CTFBaseWeaponGun::WeaponGetSpread ()
 {
 	typedef float(__thiscall * OriginalFn) (PVOID);
 	// ida confirms 455
-	return getvfunc<OriginalFn> (this, 455) (this);
+	return getvfunc<OriginalFn> (this, 456) (this);
 }
 
 void CBaseCombatCharacter::UpdateGlowEffect ()
