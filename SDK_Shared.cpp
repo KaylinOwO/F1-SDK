@@ -316,12 +316,12 @@ void CBaseEntity::SetCycle(int cyc) const
 	// TODO: invalidatephysicsrecursive "55 8B EC 53 8B 5D 08 B8 ? ? ? ? 56"
 	GetCycle() = cyc;
 
-	typedef void(__thiscall * InvalidatePhysicsRecursiveFn)(unsigned int flags);
+	typedef void(__thiscall * InvalidatePhysicsRecursiveFn)(const void *, unsigned int flags);
 
-	static InvalidatePhysicsRecursiveFn fn = (InvalidatePhysicsRecursiveFn)gSignatures.GetClientSignature("55 8B EC 53 8B 5D 08 B8 ? ? ? ? 56");
+	static InvalidatePhysicsRecursiveFn fn = (InvalidatePhysicsRecursiveFn)gSignatures.GetClientSignature("55 8B EC 51 53 8B 5D 08 56 8B F3 83 E6 04");
 
 	// pass ANIMATION_CHANGED flag
-	fn(0x8);
+	fn(this, 0x8);
 }
 
 float &CBaseEntity::GetPlaybackRate() const

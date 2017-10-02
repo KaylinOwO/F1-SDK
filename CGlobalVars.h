@@ -21,5 +21,6 @@ enum Offsets
 	playSound                  = 78,
 	overrideView               = 16,
 	drawModelExecute           = 19,
+	overrideConfig             = 16,
 };
 };
