@@ -663,7 +663,7 @@ struct WeaponData_t *CBaseCombatWeapon::GetWeaponData()
 int CBaseCombatWeapon::GetWeaponID()
 {
 	typedef int(__thiscall * OriginalFn)(PVOID);
-	return getvfunc<OriginalFn>(this, 422)(this);
+	return getvfunc<OriginalFn>(this, 423)(this);
 }
 
 char *CBaseCombatWeapon::GetPrintName()
